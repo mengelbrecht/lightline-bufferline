@@ -1,5 +1,3 @@
-" vim: et sw=2 sts=2
-
 " Plugin:      https://github.com/mgee/lightline-bufferline
 " Description: A lightweight bufferline for the lightline vim plugin.
 " Maintainer:  Markus Engelbrecht <https://github.com/mgee>
