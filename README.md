@@ -9,6 +9,7 @@ This plugin provides bufferline functionality for the [lightline](https://github
 - [Installation](#installation)
 - [Integration](#integration)
 - [Configuration](#configuration)
+- [Mappings](#mappings)
 - [Example](#example)
 - [License](#license)
 
@@ -49,10 +50,33 @@ Defines whether to shorten the path using the `pathshorten` function. Default is
 ##### `g:lightline#bufferline#show_number`
 
 Defines whether to add the buffer number to the buffer name. Default is `0`.
+Valid values are:
+* `0`: No numbers
+* `1`: Buffer number as shown by the `:ls` command
+* `2`: Ordinal number (buffers are numbered from *1* to *n* sequentially)
 
 ##### `g:lightline#bufferline#unnamed`
 
 The name to use for unnamed buffers. Default is `'*'`.
+
+## Mappings
+
+This plugin provides Plug mappings to switch to buffers using their ordinal number in the bufferline.
+To display the ordinal numbers in the bufferline use the setting `g:lightline#bufferline#show_number = 2`.
+
+To use the Plug mappings you can use e.g. these mappings:
+```viml
+nmap <Leader>1 <Plug>lightline#bufferline#go(1)
+nmap <Leader>2 <Plug>lightline#bufferline#go(2)
+nmap <Leader>3 <Plug>lightline#bufferline#go(3)
+nmap <Leader>4 <Plug>lightline#bufferline#go(4)
+nmap <Leader>5 <Plug>lightline#bufferline#go(5)
+nmap <Leader>6 <Plug>lightline#bufferline#go(6)
+nmap <Leader>7 <Plug>lightline#bufferline#go(7)
+nmap <Leader>8 <Plug>lightline#bufferline#go(8)
+nmap <Leader>9 <Plug>lightline#bufferline#go(9)
+nmap <Leader>0 <Plug>lightline#bufferline#go(10)
+```
 
 ## Example
 
