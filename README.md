@@ -67,10 +67,11 @@ let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 let g:lightline.component_type   = {'buffers': 'tabsel'}
 ```
+
 ## FAQ
 
-Q: I can't see the tabline!
-A: Add `set showtabline=2` to your configuration. This forces the tabline to always show.
+**Q:** I can't see the tabline!
+**A:** Add `set showtabline=2` to your configuration. This forces the tabline to always show.
 
 ## License
 
