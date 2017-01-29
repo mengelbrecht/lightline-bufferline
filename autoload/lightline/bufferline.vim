@@ -54,15 +54,69 @@ function! s:get_buffer_names(buffers, from, to)
   return l:names
 endfunction
 
+function! s:get_buffer_lengths(list)
+  return map(copy(a:list), 'len(v:val) + 4')
+endfunction
+
+function! s:sum(list)
+  let l:sum = 0
+  for l:value in a:list
+    let l:sum += l:value
+  endfor
+  return l:sum
+endfunction
+
+function! s:fit_lengths(list, available)
+  let l:remaining = a:available
+  let l:count = 0
+  for l:length in a:list
+    if l:remaining - l:length < 0
+      break
+    endif
+    let l:count += 1
+    let l:remaining -= l:length
+  endfor
+  return [l:remaining, l:count]
+endfunction
+
+function! s:select_buffers(before, current, after)
+  let [l:before_lengths, l:after_lengths] = [s:get_buffer_lengths(a:before), s:get_buffer_lengths(a:after)]
+
+  " The current buffer is always displayed
+  let l:width = &columns - (len(a:current[0]) + 4)
+
+  " Display all buffers if there is enough space to display them
+  if s:sum(l:before_lengths) + s:sum(l:after_lengths) <= l:width
+    return [a:before, a:current, a:after]
+  endif
+
+  " Add one buffer on the right
+  if len(l:after_lengths) > 0
+    let l:width -= l:after_lengths[0]
+  endif
+
+  " Add as many buffers as possible from on the left
+  let [l:width, l:left] = s:fit_lengths(l:before_lengths, l:width)
+  let l:before = a:before[-l:left:]
+
+  " Fill up the remaining space with buffers on the right
+  " And keep track of the one buffer that was added earlier
+  let [l:width, l:right] = s:fit_lengths(l:after_lengths[1:], l:width)
+  let l:right += 1
+
+  return [a:before[-l:left:], a:current, a:after[:l:right]]
+endfunction
+
 function! lightline#bufferline#buffers()
   let l:buffers = s:filtered_buffers()
-  let l:current = index(l:buffers, bufnr('%'))
-  if l:current == -1
+  let l:current_index = index(l:buffers, bufnr('%'))
+  if l:current_index == -1
     return [s:get_buffer_names(l:buffers, 0, len(l:buffers)), [], []]
   endif
-  return [s:get_buffer_names(l:buffers, 0, l:current),
-        \ s:get_buffer_names(l:buffers, l:current, l:current + 1),
-        \ s:get_buffer_names(l:buffers, l:current + 1, len(l:buffers))]
+  let l:before = s:get_buffer_names(l:buffers, 0, l:current_index)
+  let l:current = s:get_buffer_names(l:buffers, l:current_index, l:current_index + 1)
+  let l:after = s:get_buffer_names(l:buffers, l:current_index + 1, len(l:buffers))
+  return s:select_buffers(l:before, l:current, l:after)
 endfunction
 
 noremap <silent> <Plug>lightline#bufferline#go(1)  :call <SID>goto_nth_buffer(0)<CR>
