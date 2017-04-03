@@ -94,8 +94,12 @@ let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 ## FAQ
 
-**Q:** I can't see the tabline!
+**Q:** I can't see the tabline!<br/>
 **A:** Add `set showtabline=2` to your configuration. This forces the tabline to always show.
+
+**Q:** My vim GUI (MacVim, gVim, etc.) displays a graphical tabline and not the lightline tabline!<br/>
+**A:** Add `set guioptions-=e` to your configuration (and guard it with `if has('gui_running') ... endif`).
+This will disable the GUI tabline and enable the lightline tabline.
 
 ## License
 
