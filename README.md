@@ -43,6 +43,10 @@ The filename-modifier applied to each buffer name. Default is `':.'`.
 
 The indicator to use for a modified buffer. Default is `'+'`.
 
+##### `g:lightline#bufferline#read_only`
+
+The indicator to use for a read-only buffer. Default is `'-'`.
+
 ##### `g:lightline#bufferline#shorten_path`
 
 Defines whether to shorten the path using the `pathshorten` function. Default is `1`.
