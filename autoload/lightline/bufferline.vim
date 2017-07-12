@@ -9,7 +9,7 @@ let g:loaded_lightline_bufferline = 1
 
 let s:filename_modifier = get(g:, 'lightline#bufferline#filename_modifier', ':.')
 let s:modified          = get(g:, 'lightline#bufferline#modified', '+')
-let s:read_only         = get(g:, 'lightline#bufferline#read_only', '')
+let s:read_only         = get(g:, 'lightline#bufferline#read_only', '-')
 let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
@@ -21,7 +21,7 @@ function! s:get_buffer_name(i, buffer)
   elseif s:shorten_path
     let l:name = pathshorten(l:name)
   endif
-  if getbufvar(a:buffer, '&filetype') != 'help' && (getbufvar(a:buffer, '&readonly') || !getbufvar(a:buffer, '&modifiable'))
+  if s:is_read_only(a:buffer)
     let l:name .= ' ' . s:read_only
   endif
   if getbufvar(a:buffer, '&mod')
@@ -109,6 +109,12 @@ function! s:select_buffers(before, current, after)
   let l:right += 1
 
   return [a:before[-l:left:], a:current, a:after[:l:right]]
+endfunction
+
+function! s:is_read_only(buffer)
+    let l:modifiable = getbufvar(a:buffer, '&modifiable')
+    let l:readonly = getbufvar(a:buffer, '&readonly')
+    return (l:readonly || !l:modifiable) && getbufvar(a:buffer, '&filetype') != 'help'
 endfunction
 
 function! lightline#bufferline#buffers()
