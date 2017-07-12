@@ -21,10 +21,11 @@ function! s:get_buffer_name(i, buffer)
   elseif s:shorten_path
     let l:name = pathshorten(l:name)
   endif
+  if getbufvar(a:buffer, '&filetype') != 'help' && (getbufvar(a:buffer, '&readonly') || !getbufvar(a:buffer, '&modifiable'))
+    let l:name .= ' ' . s:read_only
+  endif
   if getbufvar(a:buffer, '&mod')
     let l:name .= ' ' . s:modified
-  elseif getbufvar(a:buffer, '&readonly') || !getbufvar(a:buffer, '&modifiable')
-    let l:name .= ' ' . s:read_only
   endif
   if s:show_number == 1
     let l:name = a:buffer . ' ' . l:name
