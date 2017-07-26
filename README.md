@@ -47,6 +47,10 @@ The indicator to use for a modified buffer. Default is `'+'`.
 
 The indicator to use for a read-only buffer. Default is `'-'`.
 
+##### `g:lightline#bufferline#omit_path`
+
+Only display the filename in a path. Default is `0`.
+
 ##### `g:lightline#bufferline#shorten_path`
 
 Defines whether to shorten the path using the `pathshorten` function. Default is `1`.
