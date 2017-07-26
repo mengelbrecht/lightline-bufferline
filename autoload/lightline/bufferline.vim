@@ -11,6 +11,7 @@ let s:filename_modifier = get(g:, 'lightline#bufferline#filename_modifier', ':.'
 let s:modified          = get(g:, 'lightline#bufferline#modified', '+')
 let s:read_only         = get(g:, 'lightline#bufferline#read_only', '-')
 let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
+let s:omit_path         = get(g:, 'lightline#bufferline#omit_path', 0)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
 
@@ -18,6 +19,8 @@ function! s:get_buffer_name(i, buffer)
   let l:name = fnamemodify(bufname(a:buffer), s:filename_modifier)
   if l:name == ''
     let l:name = s:unnamed
+  elseif s:omit_path
+    let l:name = substitute(l:name, '^.*[\\\/]', '', '')
   elseif s:shorten_path
     let l:name = pathshorten(l:name)
   endif
