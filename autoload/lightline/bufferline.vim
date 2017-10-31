@@ -15,11 +15,14 @@ let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
 
 function! s:get_buffer_name(i, buffer)
-  let l:name = fnamemodify(bufname(a:buffer), s:filename_modifier)
+  let l:name = bufname(a:buffer)
   if l:name == ''
     let l:name = s:unnamed
-  elseif s:shorten_path
-    let l:name = pathshorten(l:name)
+  else
+    let l:name = fnamemodify(l:name, s:filename_modifier)
+    if s:shorten_path
+      let l:name = pathshorten(l:name)
+    endif
   endif
   if s:is_read_only(a:buffer)
     let l:name .= ' ' . s:read_only
