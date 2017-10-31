@@ -13,6 +13,9 @@ let s:read_only         = get(g:, 'lightline#bufferline#read_only', '-')
 let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
+let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '…')
+
+let s:more_buffers_width = len(s:more_buffers) + 2
 
 function! s:get_buffer_name(i, buffer)
   let l:name = bufname(a:buffer)
@@ -97,25 +100,63 @@ function! s:select_buffers(before, current, after)
     return [a:before, a:current, a:after]
   endif
 
+  " Try to fit as many buffers as possible
+  let [l:before, l:current, l:after] = s:select_fitting_buffers(a:before, a:current, a:after, l:before_lengths, l:after_lengths, l:width)
+
+  " See on which side buffers did not fit
+  let l:more_before = len(a:before) > len(l:before)
+  let l:more_after = len(a:after) > len(l:after)
+
+  if l:more_before && l:more_after
+    " Buffers on both sides don't fit. Recompute, but account for s:more_buffers to be visible on both sides
+    let [l:before, l:current, l:after] = s:select_fitting_buffers(a:before, a:current, a:after, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width*2)
+    let l:before = [s:more_buffers] + l:before
+    let l:after += [s:more_buffers]
+  elseif l:more_before || l:more_after
+    " Buffers on one side don't fit. Recompute, but account for s:more_buffers to be visible on that side
+    let [l:before, l:current, l:after] = s:select_fitting_buffers(a:before, a:current, a:after, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width)
+    " With s:more_buffers visible it is possible that buffers on another side don't fit anymore
+    let l:more_before = len(a:before) > len(l:before)
+    let l:more_after = len(a:after) > len(l:after)
+    if l:more_before && l:more_after
+      " Indeed, buffers on both sides don't fit now. Recompute, but account for s:more_buffers to be visible on both sides
+      let [l:before, l:current, l:after] = s:select_fitting_buffers(a:before, a:current, a:after, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width*2)
+      " Now add s:more_buffers on both sides
+      let l:before = [s:more_buffers] + l:before
+      let l:after += [s:more_buffers]
+    elseif l:more_before
+      " Buffers on the left side don't fit, add s:more_buffers to the left
+      let l:before = [s:more_buffers] + l:before
+    elseif l:more_after
+      " Buffers on the right side don't fit, add s:more_buffers to the right
+      let l:after += [s:more_buffers]
+    end
+  endif
+
+  return [l:before, l:current, l:after]
+endfunction
+
+function! s:select_fitting_buffers(before, current, after, before_lengths, after_lengths, width)
+  let l:width = a:width
   let l:initial_right = 0
   let l:right = 0
   let l:left = 0
 
   " Add one buffer on the right if there is enough space for it
-  if len(l:after_lengths) > 0
-    let [l:width, l:initial_right] = s:fit_lengths(l:after_lengths[:0], l:width)
+  if len(a:after_lengths) > 0
+    let [l:width, l:initial_right] = s:fit_lengths(a:after_lengths[:0], l:width)
   endif
 
   " Add as many buffers as possible on the left
   " Don't forget to use the 'before' list in reversed order
-  let [l:width, l:left] = s:fit_lengths(reverse(l:before_lengths), l:width)
+  let [l:width, l:left] = s:fit_lengths(reverse(a:before_lengths), l:width)
   " Handle empty list carefully, slices are inclusive
   let l:before = l:left == 0 ? [] : a:before[-l:left:]
 
   " If one buffer on the right was added, maybe more can fit?
   if l:initial_right > 0
     " Fill up the remaining space with buffers on the right
-    let [l:width, l:right] = s:fit_lengths(l:after_lengths[l:initial_right:], l:width)
+    let [l:width, l:right] = s:fit_lengths(a:after_lengths[l:initial_right:], l:width)
     " Keep track of the one buffer that was added earlier
     let l:right += l:initial_right
   endif
