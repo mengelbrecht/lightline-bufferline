@@ -97,21 +97,34 @@ function! s:select_buffers(before, current, after)
     return [a:before, a:current, a:after]
   endif
 
-  " Add one buffer on the right
+  let l:initial_right = 0
+  let l:right = 0
+  let l:left = 0
+
+  " Add one buffer on the right if there is enough space for it
   if len(l:after_lengths) > 0
-    let l:width -= l:after_lengths[0]
+    let [l:width, l:initial_right] = s:fit_lengths(l:after_lengths[:0], l:width)
   endif
 
-  " Add as many buffers as possible from on the left
-  let [l:width, l:left] = s:fit_lengths(l:before_lengths, l:width)
-  let l:before = a:before[-l:left:]
+  " Add as many buffers as possible on the left
+  " Don't forget to use the 'before' list in reversed order
+  let [l:width, l:left] = s:fit_lengths(reverse(l:before_lengths), l:width)
+  " Handle empty list carefully, slices are inclusive
+  let l:before = l:left == 0 ? [] : a:before[-l:left:]
 
-  " Fill up the remaining space with buffers on the right
-  " And keep track of the one buffer that was added earlier
-  let [l:width, l:right] = s:fit_lengths(l:after_lengths[1:], l:width)
-  let l:right += 1
+  " If one buffer on the right was added, maybe more can fit?
+  if l:initial_right > 0
+    " Fill up the remaining space with buffers on the right
+    let [l:width, l:right] = s:fit_lengths(l:after_lengths[l:initial_right:], l:width)
+    " Keep track of the one buffer that was added earlier
+    let l:right += l:initial_right
+  endif
 
-  return [a:before[-l:left:], a:current, a:after[:l:right]]
+  " Subtract 1 to account for slices being inclusive, i.e. list[:1] returns two results.
+  " Also handle empty lists carefully.
+  let l:after = l:right == 0 ? [] : a:after[:l:right-1]
+
+  return [l:before, a:current, l:after]
 endfunction
 
 function! s:is_read_only(buffer)
