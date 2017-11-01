@@ -109,10 +109,10 @@ function! s:select_buffers(before, current, after)
   " Handle empty list carefully, slices are inclusive
   let l:before = l:left == 0 ? [] : a:before[-l:left:]
 
-  " If one buffer on the right size was added, maybe more can fit?
+  " If one buffer on the right was added, maybe more can fit?
   if l:initial_right > 0
     " Fill up the remaining space with buffers on the right
-    let [l:width, l:right] = s:fit_lengths(l:after_lengths[1:], l:width)
+    let [l:width, l:right] = s:fit_lengths(l:after_lengths[l:initial_right:], l:width)
     " Keep track of the one buffer that was added earlier
     let l:right += l:initial_right
   endif
