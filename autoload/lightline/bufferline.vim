@@ -13,7 +13,7 @@ let s:read_only         = get(g:, 'lightline#bufferline#read_only', '-')
 let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
-let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '…')
+let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '...')
 
 let s:more_buffers_width = len(s:more_buffers) + 2
 
