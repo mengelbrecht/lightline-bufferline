@@ -67,6 +67,14 @@ Valid values are:
 
 The name to use for unnamed buffers. Default is `'*'`.
 
+##### `g:lightline#bufferline#unicode_symbols`
+
+Use unicode symbols for modified and read-only buffers as well as the more buffers indicator. Default is `0`.
+
+If set to `1` the symbols `+`, `-` and `...` are replaced by `✎`, `` and `…`.
+
+*Note: The symbols are only correctly displayed if your font supports these characters.*
+
 ## Mappings
 
 This plugin provides Plug mappings to switch to buffers using their ordinal number in the bufferline.

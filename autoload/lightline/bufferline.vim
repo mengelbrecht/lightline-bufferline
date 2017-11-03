@@ -8,13 +8,19 @@ endif
 let g:loaded_lightline_bufferline = 1
 
 let s:filename_modifier = get(g:, 'lightline#bufferline#filename_modifier', ':.')
-let s:modified          = get(g:, 'lightline#bufferline#modified', '+')
-let s:read_only         = get(g:, 'lightline#bufferline#read_only', '-')
 let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
-let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '...')
-
+let s:unicode_symbols   = get(g:, 'lightline#bufferline#unicode_symbols', 0)
+if s:unicode_symbols == 0
+  let s:modified        = get(g:, 'lightline#bufferline#modified', '+')
+  let s:read_only       = get(g:, 'lightline#bufferline#read_only', '-')
+  let s:more_buffers    = get(g:, 'lightline#bufferline#more_buffers', '...')
+else
+  let s:modified        = get(g:, 'lightline#bufferline#modified', '✎')
+  let s:read_only       = get(g:, 'lightline#bufferline#read_only', '')
+  let s:more_buffers    = get(g:, 'lightline#bufferline#more_buffers', '…')
+endif
 let s:more_buffers_width = len(s:more_buffers) + 2
 
 function! s:get_buffer_name(i, buffer)
