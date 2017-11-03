@@ -93,7 +93,7 @@ function! s:select_buffers(before, current, after)
   let [l:before_lengths, l:after_lengths] = [s:get_buffer_lengths(a:before), s:get_buffer_lengths(a:after)]
 
   " The current buffer is always displayed
-  let l:width = &columns - (len(a:current[0]) + 4)
+  let l:width = &columns - s:get_buffer_lengths(a:current[:0])[0]
 
   " Display all buffers if there is enough space to display them
   if s:sum(l:before_lengths) + s:sum(l:after_lengths) <= l:width
