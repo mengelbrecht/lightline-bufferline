@@ -8,6 +8,7 @@ endif
 let g:loaded_lightline_bufferline = 1
 
 let s:filename_modifier = get(g:, 'lightline#bufferline#filename_modifier', ':.')
+let s:number_map        = get(g:, 'lightline#bufferline#number_map', {})
 let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
@@ -42,7 +43,7 @@ function! s:get_buffer_name(i, buffer)
   if s:show_number == 1
     let l:name = a:buffer . ' ' . l:name
   elseif s:show_number == 2
-    let l:name = (a:i + 1) . ' ' . l:name
+    let l:name = get(s:number_map, a:i + 1, (a:i + 1) . ' ') . l:name
   endif
   return substitute(l:name, '%', '%%', 'g')
 endfunction
