@@ -63,6 +63,23 @@ Valid values are:
 * `1`: Buffer number as shown by the `:ls` command
 * `2`: Ordinal number (buffers are numbered from *1* to *n* sequentially)
 
+##### `g:lightline#bufferline#number_map`
+
+Dictionary mapping ordinal numbers (0-9) to their alternate character representations. Default is `{}`.
+
+For example, to use unicode superscript symbols:
+```viml
+let g:lightline#bufferline#number_map = {
+\ 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴',
+\ 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹'
+\ }
+```
+
+When a mapping exists, no space is added before the buffer name.
+Any desired spacing needs to be explicitly included as part of the mapped string.
+
+*Note: The option only applies when `g:lightline#bufferline#show_number = 2`.*
+
 ##### `g:lightline#bufferline#unnamed`
 
 The name to use for unnamed buffers. Default is `'*'`.
