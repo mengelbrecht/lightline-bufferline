@@ -67,12 +67,18 @@ Valid values are:
 
 Dictionary mapping ordinal numbers (0-9) to their alternate character representations. Default is `{}`.
 
-For example, to use unicode superscript symbols:
+For example, to use unicode superscript numerals:
 ```viml
 let g:lightline#bufferline#number_map = {
 \ 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴',
-\ 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹'
-\ }
+\ 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹'}
+```
+
+... or unicode subscript numerals:
+```viml
+let g:lightline#bufferline#number_map = {
+\ 0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄',
+\ 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉'}
 ```
 
 When a mapping exists, no space is added before the buffer name.
