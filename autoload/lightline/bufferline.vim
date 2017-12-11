@@ -193,6 +193,10 @@ function! lightline#bufferline#buffers()
   return s:select_buffers(l:before, l:current, l:after)
 endfunction
 
+function! lightline#bufferline#buffer_count()
+  return len(s:filtered_buffers())
+endfunction
+
 noremap <silent> <Plug>lightline#bufferline#go(1)  :call <SID>goto_nth_buffer(0)<CR>
 noremap <silent> <Plug>lightline#bufferline#go(2)  :call <SID>goto_nth_buffer(1)<CR>
 noremap <silent> <Plug>lightline#bufferline#go(3)  :call <SID>goto_nth_buffer(2)<CR>
