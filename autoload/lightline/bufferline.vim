@@ -2,6 +2,8 @@
 " Description: A lightweight bufferline for the lightline vim plugin.
 " Maintainer:  Markus Engelbrecht <https://github.com/mgee>
 
+scriptencoding utf-8
+
 if exists('g:loaded_lightline_bufferline')
   finish
 endif
@@ -26,7 +28,7 @@ let s:more_buffers_width = len(s:more_buffers) + 2
 
 function! s:get_buffer_name(i, buffer)
   let l:name = bufname(a:buffer)
-  if l:name == ''
+  if l:name ==# ''
     let l:name = s:unnamed
   else
     let l:name = fnamemodify(l:name, s:filename_modifier)
@@ -178,7 +180,7 @@ endfunction
 function! s:is_read_only(buffer)
     let l:modifiable = getbufvar(a:buffer, '&modifiable')
     let l:readonly = getbufvar(a:buffer, '&readonly')
-    return (l:readonly || !l:modifiable) && getbufvar(a:buffer, '&filetype') != 'help'
+    return (l:readonly || !l:modifiable) && getbufvar(a:buffer, '&filetype') !=# 'help'
 endfunction
 
 function! lightline#bufferline#buffers()
