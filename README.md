@@ -98,6 +98,12 @@ If set to `1` the symbols `+`, `-` and `...` are replaced by `✎`, `` and `�
 
 *Note: The symbols are only correctly displayed if your font supports these characters.*
 
+##### `g:lightline#bufferline#min_buffer_count`
+
+The minimum number of buffers needed to automatically show the tabline.
+When the buffer count falls below this number, the tabline will be hidden once again.
+Default is `0` (no auto-show behavior).
+
 ## Mappings
 
 This plugin provides Plug mappings to switch to buffers using their ordinal number in the bufferline.
