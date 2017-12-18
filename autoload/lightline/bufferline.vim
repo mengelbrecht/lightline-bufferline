@@ -4,12 +4,8 @@
 
 scriptencoding utf-8
 
-if exists('g:loaded_lightline_bufferline')
-  finish
-endif
-let g:loaded_lightline_bufferline = 1
-
 let s:filename_modifier = get(g:, 'lightline#bufferline#filename_modifier', ':.')
+let s:min_buffer_count  = get(g:, 'lightline#bufferline#min_buffer_count', 0)
 let s:number_map        = get(g:, 'lightline#bufferline#number_map', {})
 let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
@@ -181,6 +177,28 @@ function! s:is_read_only(buffer)
     let l:modifiable = getbufvar(a:buffer, '&modifiable')
     let l:readonly = getbufvar(a:buffer, '&readonly')
     return (l:readonly || !l:modifiable) && getbufvar(a:buffer, '&filetype') !=# 'help'
+endfunction
+
+function! s:auto_tabline(buffer_count) abort
+  if a:buffer_count >= s:min_buffer_count
+    if &showtabline != 2 && &lines > 3
+      set showtabline=2
+    endif
+  else
+    if &showtabline != 0
+      set showtabline=0
+    endif
+  endif
+endfunction
+
+function! lightline#bufferline#init()
+  augroup lightline_bufferline
+    autocmd!
+    if s:min_buffer_count > 0
+      autocmd BufEnter  * call <SID>auto_tabline(len(<SID>filtered_buffers()))
+      autocmd BufUnload * call <SID>auto_tabline(len(<SID>filtered_buffers()) - 1)
+    endif
+  augroup END
 endfunction
 
 function! lightline#bufferline#buffers()
