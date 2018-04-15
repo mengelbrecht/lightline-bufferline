@@ -10,6 +10,7 @@ let s:number_map        = get(g:, 'lightline#bufferline#number_map', {})
 let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
+let s:enable_devicons   = get(g:, 'lightline#bufferline#enable_devicons', 0)
 let s:unicode_symbols   = get(g:, 'lightline#bufferline#unicode_symbols', 0)
 if s:unicode_symbols == 0
   let s:modified        = get(g:, 'lightline#bufferline#modified', '+')
@@ -31,6 +32,9 @@ function! s:get_buffer_name(i, buffer)
     if s:shorten_path
       let l:name = pathshorten(l:name)
     endif
+  endif
+  if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
+    let l:name = WebDevIconsGetFileTypeSymbol(l:name) . ' ' . l:name
   endif
   if s:is_read_only(a:buffer)
     let l:name .= ' ' . s:read_only

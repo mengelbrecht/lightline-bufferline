@@ -90,6 +90,11 @@ Any desired spacing needs to be explicitly included as part of the mapped string
 
 The name to use for unnamed buffers. Default is `'*'`.
 
+##### `g:lightline#bufferline#enable_devicons`
+
+Enables the usage of [vim-devicons](https://github.com/ryanoasis/vim-devicons) to display a filetype icon for the buffer.
+Default is `0`.
+
 ##### `g:lightline#bufferline#unicode_symbols`
 
 Use unicode symbols for modified and read-only buffers as well as the more buffers indicator. Default is `0`.
