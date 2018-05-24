@@ -33,6 +33,12 @@ let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 let g:lightline.component_type   = {'buffers': 'tabsel'}
 ```
 
+If you're adding the buffers to the bottom statusbar, the `modified` indicator will not be updated immediately. To work around this, add this autocmd to your `.vimrc`:
+```viml
+autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
+```
+(https://github.com/mgee/lightline-bufferline/issues/5#issuecomment-293679716)
+
 ## Configuration
 
 ##### `g:lightline#bufferline#filename_modifier`
