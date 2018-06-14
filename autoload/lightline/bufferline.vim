@@ -13,12 +13,12 @@ let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
 let s:enable_devicons   = get(g:, 'lightline#bufferline#enable_devicons', 0)
 let s:unicode_symbols   = get(g:, 'lightline#bufferline#unicode_symbols', 0)
 if s:unicode_symbols == 0
-  let s:modified        = get(g:, 'lightline#bufferline#modified', '+')
-  let s:read_only       = get(g:, 'lightline#bufferline#read_only', '-')
+  let s:modified        = get(g:, 'lightline#bufferline#modified', ' +')
+  let s:read_only       = get(g:, 'lightline#bufferline#read_only', ' -')
   let s:more_buffers    = get(g:, 'lightline#bufferline#more_buffers', '...')
 else
-  let s:modified        = get(g:, 'lightline#bufferline#modified', '✎')
-  let s:read_only       = get(g:, 'lightline#bufferline#read_only', '')
+  let s:modified        = get(g:, 'lightline#bufferline#modified', ' ✎')
+  let s:read_only       = get(g:, 'lightline#bufferline#read_only', ' ')
   let s:more_buffers    = get(g:, 'lightline#bufferline#more_buffers', '…')
 endif
 let s:more_buffers_width = len(s:more_buffers) + 2
@@ -37,10 +37,10 @@ function! s:get_buffer_name(i, buffer)
     let l:name = WebDevIconsGetFileTypeSymbol(l:name) . ' ' . l:name
   endif
   if s:is_read_only(a:buffer)
-    let l:name .= ' ' . s:read_only
+    let l:name .= s:read_only
   endif
   if getbufvar(a:buffer, '&mod')
-    let l:name .= ' ' . s:modified
+    let l:name .= s:modified
   endif
   if s:show_number == 1
     let l:name = a:buffer . ' ' . l:name
