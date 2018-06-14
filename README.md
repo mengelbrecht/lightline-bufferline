@@ -46,7 +46,7 @@ The filename-modifier applied to each buffer name. Default is `':.'`.
 
 ##### `g:lightline#bufferline#modified`
 
-The indicator to use for a modified buffer. Default is `'+'`.
+The indicator to use for a modified buffer. Default is `' +'`.
 
 ##### `g:lightline#bufferline#more_buffers`
 
@@ -54,7 +54,7 @@ The indicator to use when there are buffers that are not shown on the bufferline
 
 ##### `g:lightline#bufferline#read_only`
 
-The indicator to use for a read-only buffer. Default is `'-'`.
+The indicator to use for a read-only buffer. Default is `' -'`.
 
 ##### `g:lightline#bufferline#shorten_path`
 
