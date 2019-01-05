@@ -17,7 +17,7 @@ This plugin provides bufferline functionality for the [lightline](https://github
 
 Installation can be easily done with a plugin manager of your choice. For example [vim-plug](https://github.com/junegunn/vim-plug):
 ```viml
-Plug 'mgee/lightline-bufferline'
+Plug 'mengelbrecht/lightline-bufferline'
 ```
 
 ## Integration
