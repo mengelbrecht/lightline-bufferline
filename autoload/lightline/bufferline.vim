@@ -45,11 +45,21 @@ function! s:get_buffer_name(i, buffer)
   if s:show_number == 1
     let l:name = a:buffer . ' ' . l:name
   elseif s:show_number == 2
-    let l:name = get(s:number_map, a:i + 1, (a:i + 1) . ' ') . l:name
+    let l:name = s:get_from_number_map(a:i + 1) . l:name
   elseif s:show_number == 3
-    let l:name = a:buffer . get(s:number_map, a:i + 1, (a:i + 1) . ' ') . ' ' . l:name
+    let l:name = a:buffer . s:get_from_number_map(a:i + 1) . ' ' . l:name
   endif
   return substitute(l:name, '%', '%%', 'g')
+endfunction
+
+function! s:get_from_number_map(i)
+  let l:number = a:i
+  let l:result = ''
+  for i in range(1, strlen(l:number))
+    let l:result = get(s:number_map, l:number % 10, l:number % 10) . l:result
+    let l:number = l:number / 10
+  endfor
+  return l:result
 endfunction
 
 function! s:filter_buffer(i)
