@@ -46,6 +46,8 @@ function! s:get_buffer_name(i, buffer)
     let l:name = a:buffer . ' ' . l:name
   elseif s:show_number == 2
     let l:name = get(s:number_map, a:i + 1, (a:i + 1) . ' ') . l:name
+  elseif s:show_number == 3
+    let l:name = a:buffer . get(s:number_map, a:i + 1, (a:i + 1) . ' ') . ' ' . l:name
   endif
   return substitute(l:name, '%', '%%', 'g')
 endfunction
