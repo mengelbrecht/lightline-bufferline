@@ -16,6 +16,7 @@ This plugin provides bufferline functionality for the [lightline](https://github
 ## Installation
 
 Installation can be easily done with a plugin manager of your choice. For example [vim-plug](https://github.com/junegunn/vim-plug):
+
 ```viml
 Plug 'mengelbrecht/lightline-bufferline'
 ```
@@ -27,6 +28,7 @@ Plug 'mengelbrecht/lightline-bufferline'
 3. Add `'buffers': 'tabsel'` to `g:lightline.component_type`.
 
 The result looks for example like this:
+
 ```viml
 let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
@@ -34,6 +36,7 @@ let g:lightline.component_type   = {'buffers': 'tabsel'}
 ```
 
 If you're adding the buffers to the bottom statusbar, the `modified` indicator will not be updated immediately. To work around this, add this autocmd to your vim config:
+
 ```viml
 autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 ```
@@ -64,15 +67,18 @@ Defines whether to shorten the path using the `pathshorten` function. Default is
 
 Defines whether to add the buffer number to the buffer name. Default is `0`.
 Valid values are:
-* `0`: No numbers
-* `1`: Buffer number as shown by the `:ls` command
-* `2`: Ordinal number (buffers are numbered from *1* to *n* sequentially)
+
+- `0`: No numbers
+- `1`: Buffer number as shown by the `:ls` command
+- `2`: Ordinal number (buffers are numbered from _1_ to _n_ sequentially)
+- `3`: Both buffer number and ordinal number next to each other (You should set g:lightline#bufferline#number_map as described below)
 
 ##### `g:lightline#bufferline#number_map`
 
 Dictionary mapping ordinal numbers (0-9) to their alternate character representations. Default is `{}`.
 
 For example, to use unicode superscript numerals:
+
 ```viml
 let g:lightline#bufferline#number_map = {
 \ 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴',
@@ -80,6 +86,7 @@ let g:lightline#bufferline#number_map = {
 ```
 
 ... or unicode subscript numerals:
+
 ```viml
 let g:lightline#bufferline#number_map = {
 \ 0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄',
@@ -89,7 +96,7 @@ let g:lightline#bufferline#number_map = {
 When a mapping exists, no space is added before the buffer name.
 Any desired spacing needs to be explicitly included as part of the mapped string.
 
-*Note: The option only applies when `g:lightline#bufferline#show_number = 2`.*
+_Note: The option only applies when `g:lightline#bufferline#show_number = 2`._
 
 ##### `g:lightline#bufferline#unnamed`
 
@@ -106,7 +113,7 @@ Use unicode symbols for modified and read-only buffers as well as the more buffe
 
 If set to `1` the symbols `+`, `-` and `...` are replaced by `✎`, `` and `…`.
 
-*Note: The symbols are only correctly displayed if your font supports these characters.*
+_Note: The symbols are only correctly displayed if your font supports these characters._
 
 ##### `g:lightline#bufferline#min_buffer_count`
 
@@ -120,6 +127,7 @@ This plugin provides Plug mappings to switch to buffers using their ordinal numb
 To display the ordinal numbers in the bufferline use the setting `g:lightline#bufferline#show_number = 2`.
 
 To use the Plug mappings you can use e.g. these mappings:
+
 ```viml
 nmap <Leader>1 <Plug>lightline#bufferline#go(1)
 nmap <Leader>2 <Plug>lightline#bufferline#go(2)
@@ -136,6 +144,7 @@ nmap <Leader>0 <Plug>lightline#bufferline#go(10)
 ## Example
 
 The following minimal example adds the bufferline to the lightline tabline and demonstrates a few custom bufferline options:
+
 ```viml
 let g:lightline#bufferline#show_number  = 1
 let g:lightline#bufferline#shorten_path = 0
