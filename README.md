@@ -71,7 +71,7 @@ Valid values are:
 - `0`: No numbers
 - `1`: Buffer number as shown by the `:ls` command
 - `2`: Ordinal number (buffers are numbered from _1_ to _n_ sequentially)
-- `3`: Both buffer number and ordinal number next to each other (You should set g:lightline#bufferline#number_map as described below)
+- `3`: Both buffer number and ordinal number next to each other (you should set `g:lightline#bufferline#number_map` as described below)
 
 ##### `g:lightline#bufferline#number_map`
 
