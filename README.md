@@ -46,6 +46,7 @@ autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 ##### `g:lightline#bufferline#filename_modifier`
 
 The filename-modifier applied to each buffer name. Default is `':.'`.
+To see the available options use the command `:help filename-modifiers` in vim.
 
 ##### `g:lightline#bufferline#modified`
 
@@ -164,6 +165,9 @@ let g:lightline.component_type   = {'buffers': 'tabsel'}
 **Q:** My vim GUI (MacVim, gVim, etc.) displays a graphical tabline and not the lightline tabline!<br/>
 **A:** Add `set guioptions-=e` to your configuration (and guard it with `if has('gui_running') ... endif`).
 This will disable the GUI tabline and enable the lightline tabline.
+
+**Q:** How can I hide the path and show only the filename?<br/>
+**A:** Add `let g:lightline#bufferline#filename_modifier = ':t'` to your configuration.
 
 ## License
 
