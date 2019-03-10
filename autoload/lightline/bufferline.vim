@@ -34,7 +34,7 @@ function! s:get_buffer_name(i, buffer)
     endif
   endif
   if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
-    let l:name = WebDevIconsGetFileTypeSymbol(l:name) . ' ' . l:name
+    let l:name = WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t')) . ' ' . l:name
   endif
   if s:is_read_only(a:buffer)
     let l:name .= s:read_only
