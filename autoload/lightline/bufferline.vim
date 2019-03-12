@@ -63,7 +63,7 @@ function! s:get_from_number_map(i)
 endfunction
 
 function! s:filter_buffer(i)
-  return bufexists(a:i) && buflisted(a:i)
+  return bufexists(a:i) && buflisted(a:i) && !(getbufvar(a:i, '&filetype') ==# 'qf')
 endfunction
 
 function! s:filtered_buffers()
