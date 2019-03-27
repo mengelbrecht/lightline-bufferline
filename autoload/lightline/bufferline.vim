@@ -9,6 +9,7 @@ let s:min_buffer_count  = get(g:, 'lightline#bufferline#min_buffer_count', 0)
 let s:number_map        = get(g:, 'lightline#bufferline#number_map', {})
 let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
+let s:number_separator  = get(g:, 'lightline#bufferline#number_separator', ' ')
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
 let s:enable_devicons   = get(g:, 'lightline#bufferline#enable_devicons', 0)
 let s:unicode_symbols   = get(g:, 'lightline#bufferline#unicode_symbols', 0)
@@ -43,11 +44,11 @@ function! s:get_buffer_name(i, buffer)
     let l:name .= s:modified
   endif
   if s:show_number == 1
-    let l:name = a:buffer . ' ' . l:name
+    let l:name = a:buffer . s:number_separator . l:name
   elseif s:show_number == 2
-    let l:name = s:get_from_number_map(a:i + 1) . l:name
+    let l:name = s:get_from_number_map(a:i + 1). s:number_separator . l:name
   elseif s:show_number == 3
-    let l:name = a:buffer . s:get_from_number_map(a:i + 1) . ' ' . l:name
+    let l:name = a:buffer . s:get_from_number_map(a:i + 1) . s:number_separator . l:name
   endif
   return substitute(l:name, '%', '%%', 'g')
 endfunction

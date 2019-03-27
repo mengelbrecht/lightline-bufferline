@@ -72,7 +72,9 @@ Valid values are:
 - `0`: No numbers
 - `1`: Buffer number as shown by the `:ls` command
 - `2`: Ordinal number (buffers are numbered from _1_ to _n_ sequentially)
-- `3`: Both buffer number and ordinal number next to each other (you should set `g:lightline#bufferline#number_map` as described below)
+- `3`: Both buffer number and ordinal number next to each other
+
+For ordinal number in option `2` and `3` the number map `g:lightline#bufferline#number_map` is used as described below.
 
 ##### `g:lightline#bufferline#number_map`
 
@@ -94,10 +96,11 @@ let g:lightline#bufferline#number_map = {
 \ 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉'}
 ```
 
-When a mapping exists, no space is added before the buffer name.
-Any desired spacing needs to be explicitly included as part of the mapped string.
+_Note: The option only applies when `g:lightline#bufferline#show_number` is set to `2` or `3`._
 
-_Note: The option only applies when `g:lightline#bufferline#show_number = 2`._
+##### `g:lightline#bufferline#number_separator`
+
+Defines the string which is used to separate the buffer number (if enabled) and the buffer name. Default is `' '`.
 
 ##### `g:lightline#bufferline#unnamed`
 
