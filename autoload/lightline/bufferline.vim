@@ -11,6 +11,7 @@ let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
 let s:number_separator  = get(g:, 'lightline#bufferline#number_separator', ' ')
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
+let s:reverse_buffers   = get(g:, 'lightline#bufferline#reverse_buffers', 0)
 let s:enable_devicons   = get(g:, 'lightline#bufferline#enable_devicons', 0)
 let s:unicode_symbols   = get(g:, 'lightline#bufferline#unicode_symbols', 0)
 if s:unicode_symbols == 0
@@ -68,7 +69,11 @@ function! s:filter_buffer(i)
 endfunction
 
 function! s:filtered_buffers()
-  return filter(range(1, bufnr('$')), 's:filter_buffer(v:val)')
+  let l:buffers = filter(range(1, bufnr('$')), 's:filter_buffer(v:val)')
+  if s:reverse_buffers == 1
+    let l:buffers = reverse(l:buffers)
+  endif
+  return l:buffers
 endfunction
 
 function! s:goto_nth_buffer(n)

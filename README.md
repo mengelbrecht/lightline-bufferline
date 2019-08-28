@@ -125,6 +125,11 @@ The minimum number of buffers needed to automatically show the tabline.
 When the buffer count falls below this number, the tabline will be hidden once again.
 Default is `0` (no auto-show behavior).
 
+##### `g:lightline#bufferline#reverse_buffers`
+
+If enabled the buffers will be displayed in a reversed order.
+Default is `0` (buffers are not reversed).
+
 ## Mappings
 
 This plugin provides Plug mappings to switch to buffers using their ordinal number in the bufferline.
