@@ -11,6 +11,8 @@ let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
 let s:number_separator  = get(g:, 'lightline#bufferline#number_separator', ' ')
 let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
+let s:reverse_buffers   = get(g:, 'lightline#bufferline#reverse_buffers', 0)
+let s:right_aligned     = get(g:, 'lightline#bufferline#right_aligned', 0)
 let s:enable_devicons   = get(g:, 'lightline#bufferline#enable_devicons', 0)
 let s:unicode_symbols   = get(g:, 'lightline#bufferline#unicode_symbols', 0)
 if s:unicode_symbols == 0
@@ -68,7 +70,11 @@ function! s:filter_buffer(i)
 endfunction
 
 function! s:filtered_buffers()
-  return filter(range(1, bufnr('$')), 's:filter_buffer(v:val)')
+  let l:buffers = filter(range(1, bufnr('$')), 's:filter_buffer(v:val)')
+  if s:reverse_buffers == 1
+    let l:buffers = reverse(l:buffers)
+  endif
+  return l:buffers
 endfunction
 
 function! s:goto_nth_buffer(n)
@@ -227,7 +233,11 @@ function! lightline#bufferline#buffers()
   let l:before = s:get_buffer_names(l:buffers, 0, l:current_index)
   let l:current = s:get_buffer_names(l:buffers, l:current_index, l:current_index + 1)
   let l:after = s:get_buffer_names(l:buffers, l:current_index + 1, len(l:buffers))
-  return s:select_buffers(l:before, l:current, l:after)
+  if s:right_aligned == 1
+    return s:select_buffers(l:after, l:current, l:before)
+  else
+    return s:select_buffers(l:before, l:current, l:after)
+  endif
 endfunction
 
 noremap <silent> <Plug>lightline#bufferline#go(1)  :call <SID>goto_nth_buffer(0)<CR>
