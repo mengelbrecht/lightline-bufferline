@@ -30,6 +30,7 @@ Plug 'mengelbrecht/lightline-bufferline'
 The result looks for example like this:
 
 ```viml
+let g:lightline                  = {}
 let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
 let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 let g:lightline.component_type   = {'buffers': 'tabsel'}
