@@ -4,25 +4,26 @@
 
 scriptencoding utf-8
 
-let s:filename_modifier = get(g:, 'lightline#bufferline#filename_modifier', ':.')
-let s:min_buffer_count  = get(g:, 'lightline#bufferline#min_buffer_count', 0)
-let s:number_map        = get(g:, 'lightline#bufferline#number_map', {})
-let s:shorten_path      = get(g:, 'lightline#bufferline#shorten_path', 1)
-let s:show_number       = get(g:, 'lightline#bufferline#show_number', 0)
-let s:number_separator  = get(g:, 'lightline#bufferline#number_separator', ' ')
-let s:unnamed           = get(g:, 'lightline#bufferline#unnamed', '*')
-let s:reverse_buffers   = get(g:, 'lightline#bufferline#reverse_buffers', 0)
-let s:right_aligned     = get(g:, 'lightline#bufferline#right_aligned', 0)
-let s:enable_devicons   = get(g:, 'lightline#bufferline#enable_devicons', 0)
-let s:unicode_symbols   = get(g:, 'lightline#bufferline#unicode_symbols', 0)
+let s:filename_modifier   = get(g:, 'lightline#bufferline#filename_modifier', ':.')
+let s:min_buffer_count    = get(g:, 'lightline#bufferline#min_buffer_count', 0)
+let s:number_map          = get(g:, 'lightline#bufferline#number_map', {})
+let s:composed_number_map = get(g:, 'lightline#bufferline#composed_number_map', {})
+let s:shorten_path        = get(g:, 'lightline#bufferline#shorten_path', 1)
+let s:show_number         = get(g:, 'lightline#bufferline#show_number', 0)
+let s:number_separator    = get(g:, 'lightline#bufferline#number_separator', ' ')
+let s:unnamed             = get(g:, 'lightline#bufferline#unnamed', '*')
+let s:reverse_buffers     = get(g:, 'lightline#bufferline#reverse_buffers', 0)
+let s:right_aligned       = get(g:, 'lightline#bufferline#right_aligned', 0)
+let s:enable_devicons     = get(g:, 'lightline#bufferline#enable_devicons', 0)
+let s:unicode_symbols     = get(g:, 'lightline#bufferline#unicode_symbols', 0)
 if s:unicode_symbols == 0
-  let s:modified        = get(g:, 'lightline#bufferline#modified', ' +')
-  let s:read_only       = get(g:, 'lightline#bufferline#read_only', ' -')
-  let s:more_buffers    = get(g:, 'lightline#bufferline#more_buffers', '...')
+  let s:modified          = get(g:, 'lightline#bufferline#modified', ' +')
+  let s:read_only         = get(g:, 'lightline#bufferline#read_only', ' -')
+  let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '...')
 else
-  let s:modified        = get(g:, 'lightline#bufferline#modified', ' ✎')
-  let s:read_only       = get(g:, 'lightline#bufferline#read_only', ' ')
-  let s:more_buffers    = get(g:, 'lightline#bufferline#more_buffers', '…')
+  let s:modified          = get(g:, 'lightline#bufferline#modified', ' ✎')
+  let s:read_only         = get(g:, 'lightline#bufferline#read_only', ' ')
+  let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '…')
 endif
 let s:more_buffers_width = len(s:more_buffers) + 2
 
@@ -57,11 +58,13 @@ endfunction
 
 function! s:get_from_number_map(i)
   let l:number = a:i
-  let l:result = ''
-  for i in range(1, strlen(l:number))
-    let l:result = get(s:number_map, l:number % 10, l:number % 10) . l:result
-    let l:number = l:number / 10
-  endfor
+  let l:result = get(s:composed_number_map, l:number, '')
+  if l:result == ""
+    for i in range(1, strlen(l:number))
+      let l:result = get(s:number_map, l:number % 10, l:number % 10) . l:result
+      let l:number = l:number / 10
+    endfor
+  endif
   return l:result
 endfunction
 
