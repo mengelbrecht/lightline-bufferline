@@ -75,11 +75,27 @@ Valid values are:
 - `2`: Ordinal number (buffers are numbered from _1_ to _n_ sequentially)
 - `3`: Both buffer number and ordinal number next to each other
 
-For ordinal number in option `2` and `3` the number map `g:lightline#bufferline#number_map` is used as described below.
+For ordinal number in option `2` and `3` number maps `g:lightline#bufferline#number_map` and `g:lightline#bufferline#composed_number_map` are used as described below.
+
+##### `g:lightline#bufferline#composed_number_map`
+
+Dictionary mapping ordinal numbers to their alternative character representations. Default is `{}`.
+
+For example, to use parenthized unicode numbers taken from [Enclosed Alphanumerics Unicode block](https://unicode.org/charts/nameslist/c_2460.html):
+
+```viml
+let g:lightline#bufferline#composed_number_map = {
+\ 1:  '⑴ ', 2:  '⑵ ', 3:  '⑶ ', 4:  '⑷ ', 5:  '⑸ ',
+\ 6:  '⑹ ', 7:  '⑺ ', 8:  '⑻ ', 9:  '⑼ ', 10: '⑽ ',
+\ 11: '⑾ ', 12: '⑿ ', 13: '⒀ ', 14: '⒁ ', 15: '⒂ ',
+\ 16: '⒃ ', 17: '⒄ ', 18: '⒅ ', 19: '⒆ ', 20: '⒇ '}
+```
+
+_Note: The option only applies when `g:lightline#bufferline#show_number` is set to `2` or `3`._
 
 ##### `g:lightline#bufferline#number_map`
 
-Dictionary mapping ordinal numbers (0-9) to their alternate character representations. Default is `{}`.
+Fallback dictionary mapping digits (0-9) which are used in ordinal number composing if the number is not mapped in `g:lightline#bufferline#composed_number_map`. Default is `{}`.
 
 For example, to use unicode superscript numerals:
 
