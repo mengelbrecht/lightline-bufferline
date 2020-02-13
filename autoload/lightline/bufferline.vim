@@ -32,7 +32,12 @@ else
   let s:component_is_raw  = 0
 endif
 let s:clickable           = has('tablineat') && s:component_is_raw ? get(g:, 'lightline#bufferline#clickable', 0) : 0
-let s:more_buffers_width = len(s:more_buffers) + 2
+if s:component_is_raw
+  let s:more_buffers = ' ' . s:more_buffers . ' '
+  let s:more_buffers_width = len(s:more_buffers)
+else
+  let s:more_buffers_width = len(s:more_buffers) + 2
+endif
 
 function! lightline#bufferline#_click_handler(minwid, clicks, btn, modifiers)
   call s:goto_nth_buffer(a:minwid)
