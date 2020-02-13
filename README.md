@@ -157,6 +157,14 @@ Default is `0` (buffers are not reversed).
 If the bufferline is used in the `right` component of the tabline this should be set to `1` to ensure the correct order of the buffers.
 Default is `0`.
 
+##### `g:lightline#bufferline#clickable`
+
+If set to `1` the bufferline is clickable under Neovim versions with `tablineat` feature. To enable this feature, you must also set the bufferline component to be raw in your `vimrc`:
+
+```viml
+let g:lightline.component_raw = {'buffers': 1}
+```
+
 ## Mappings
 
 This plugin provides Plug mappings to switch to buffers using their ordinal number in the bufferline.
