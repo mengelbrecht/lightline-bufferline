@@ -74,8 +74,9 @@ Valid values are:
 - `1`: Buffer number as shown by the `:ls` command
 - `2`: Ordinal number (buffers are numbered from _1_ to _n_ sequentially)
 - `3`: Both buffer number and ordinal number next to each other
+- `4`: Both buffer number and ordinal number next to each other, where the oridinal number is shown before buffer number
 
-For ordinal number in option `2` and `3` number maps `g:lightline#bufferline#number_map` and `g:lightline#bufferline#composed_number_map` are used as described below.
+For ordinal number in option `2`, `3` and `4`, number maps `g:lightline#bufferline#number_map` and `g:lightline#bufferline#composed_number_map` are used as described below.
 
 ##### `g:lightline#bufferline#composed_number_map`
 
@@ -118,6 +119,10 @@ _Note: The option only applies when `g:lightline#bufferline#show_number` is set 
 ##### `g:lightline#bufferline#number_separator`
 
 Defines the string which is used to separate the buffer number (if enabled) and the buffer name. Default is `' '`.
+
+#### `g:lightline#bufferline#ordinal_separator`
+
+Defines the string which is used to separate the buffer number and the oridinal number. Default is `''`.
 
 ##### `g:lightline#bufferline#unnamed`
 
