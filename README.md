@@ -120,7 +120,7 @@ _Note: The option only applies when `g:lightline#bufferline#show_number` is set 
 
 Defines the string which is used to separate the buffer number (if enabled) and the buffer name. Default is `' '`.
 
-#### `g:lightline#bufferline#ordinal_separator`
+##### `g:lightline#bufferline#ordinal_separator`
 
 Defines the string which is used to separate the buffer number and the oridinal number. Default is `''`.
 
