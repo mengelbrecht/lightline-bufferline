@@ -11,6 +11,7 @@ let s:composed_number_map = get(g:, 'lightline#bufferline#composed_number_map', 
 let s:shorten_path        = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number         = get(g:, 'lightline#bufferline#show_number', 0)
 let s:number_separator    = get(g:, 'lightline#bufferline#number_separator', ' ')
+let s:ordinal_separator   = get(g:, 'lightline#bufferline#ordinal_separator', '')
 let s:unnamed             = get(g:, 'lightline#bufferline#unnamed', '*')
 let s:reverse_buffers     = get(g:, 'lightline#bufferline#reverse_buffers', 0)
 let s:right_aligned       = get(g:, 'lightline#bufferline#right_aligned', 0)
@@ -51,7 +52,9 @@ function! s:get_buffer_name(i, buffer)
   elseif s:show_number == 2
     let l:name = s:get_from_number_map(a:i + 1). s:number_separator . l:name
   elseif s:show_number == 3
-    let l:name = a:buffer . s:get_from_number_map(a:i + 1) . s:number_separator . l:name
+    let l:name = a:buffer . s:ordinal_separator . s:get_from_number_map(a:i + 1) . s:number_separator . l:name
+  elseif s:show_number == 4
+    let l:name = s:get_from_number_map(a:i + 1) . s:ordinal_separator . a:buffer . s:number_separator . l:name
   endif
   return substitute(l:name, '%', '%%', 'g')
 endfunction
