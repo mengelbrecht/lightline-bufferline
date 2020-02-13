@@ -26,7 +26,17 @@ else
   let s:read_only         = get(g:, 'lightline#bufferline#read_only', ' ')
   let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '…')
 endif
+if exists('g:lightline.component_raw.buffers')
+  let s:component_is_raw  = g:lightline.component_raw.buffers
+else
+  let s:component_is_raw  = 0
+endif
+let s:clickable           = has('tablineat') && s:component_is_raw ? get(g:, 'lightline#bufferline#clickable', 0) : 0
 let s:more_buffers_width = len(s:more_buffers) + 2
+
+function! lightline#bufferline#_click_handler(minwid, clicks, btn, modifiers)
+  call s:goto_nth_buffer(a:minwid)
+endfunction
 
 function! s:get_buffer_name(i, buffer)
   let l:name = bufname(a:buffer)
@@ -56,7 +66,15 @@ function! s:get_buffer_name(i, buffer)
   elseif s:show_number == 4
     let l:name = s:get_from_number_map(a:i + 1) . s:ordinal_separator . a:buffer . s:number_separator . l:name
   endif
-  return substitute(l:name, '%', '%%', 'g')
+  let l:name = substitute(l:name, '%', '%%', 'g')
+  if s:component_is_raw
+    let l:name = ' ' . l:name . ' '
+  endif
+  if s:clickable
+    return '%' . string(a:i) . '@lightline#bufferline#_click_handler@' . l:name . '%X'
+  else
+    return l:name
+  endif
 endfunction
 
 function! s:get_from_number_map(i)
