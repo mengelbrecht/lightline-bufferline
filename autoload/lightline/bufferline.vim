@@ -71,14 +71,15 @@ function! s:get_buffer_name(i, buffer)
   elseif s:show_number == 4
     let l:name = s:get_from_number_map(a:i + 1) . s:ordinal_separator . a:buffer . s:number_separator . l:name
   endif
+  let l:len = len(l:name)
   let l:name = substitute(l:name, '%', '%%', 'g')
   if s:component_is_raw
     let l:name = ' ' . l:name . ' '
   endif
   if s:clickable
-    return '%' . string(a:i) . '@lightline#bufferline#_click_handler@' . l:name . '%X'
+    return ['%' . string(a:i) . '@lightline#bufferline#_click_handler@' . l:name . '%X', l:len]
   else
-    return l:name
+    return [l:name, l:len]
   endif
 endfunction
 
@@ -115,14 +116,13 @@ endfunction
 
 function! s:get_buffer_names(buffers, from, to)
   let l:names = []
+  let l:lengths = []
   for l:i in range(a:from, a:to - 1)
-    call add(l:names, s:get_buffer_name(l:i, a:buffers[l:i]))
+    let [l:name, l:len] = s:get_buffer_name(l:i, a:buffers[l:i])
+    call add(l:names, l:name)
+    call add(l:lengths, l:len + 4)
   endfor
-  return l:names
-endfunction
-
-function! s:get_buffer_lengths(list)
-  return map(copy(a:list), 'len(v:val) + 4')
+  return [l:names, l:lengths]
 endfunction
 
 function! s:sum(list)
@@ -147,37 +147,38 @@ function! s:fit_lengths(list, available)
 endfunction
 
 function! s:select_buffers(before, current, after)
-  let [l:before_lengths, l:after_lengths] = [s:get_buffer_lengths(a:before), s:get_buffer_lengths(a:after)]
+  let [l:before_names, l:current_names, l:after_names] = [a:before[0], a:current[0], a:after[0]]
+  let [l:before_lengths, l:current_lengths, l:after_lengths] = [a:before[1], a:current[1], a:after[1]]
 
   " The current buffer is always displayed
-  let l:width = &columns - s:get_buffer_lengths(a:current[:0])[0]
+  let l:width = &columns - l:current_lengths[:0][0]
 
   " Display all buffers if there is enough space to display them
   if s:sum(l:before_lengths) + s:sum(l:after_lengths) <= l:width
-    return [a:before, a:current, a:after]
+    return [l:before_names, l:current_names, l:after_names]
   endif
 
   " Try to fit as many buffers as possible
-  let [l:before, l:current, l:after] = s:select_fitting_buffers(a:before, a:current, a:after, l:before_lengths, l:after_lengths, l:width)
+  let [l:before, l:current, l:after] = s:select_fitting_buffers(l:before_names, l:current_names, l:after_names, l:before_lengths, l:after_lengths, l:width)
 
   " See on which side buffers did not fit
-  let l:more_before = len(a:before) > len(l:before)
-  let l:more_after = len(a:after) > len(l:after)
+  let l:more_before = len(l:before_names) > len(l:before)
+  let l:more_after = len(l:after_names) > len(l:after)
 
   if l:more_before && l:more_after
     " Buffers on both sides don't fit. Recompute, but account for s:more_buffers to be visible on both sides
-    let [l:before, l:current, l:after] = s:select_fitting_buffers(a:before, a:current, a:after, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width*2)
+    let [l:before, l:current, l:after] = s:select_fitting_buffers(l:before_names, l:current_names, l:after_names, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width*2)
     let l:before = [s:more_buffers] + l:before
     let l:after += [s:more_buffers]
   elseif l:more_before || l:more_after
     " Buffers on one side don't fit. Recompute, but account for s:more_buffers to be visible on that side
-    let [l:before, l:current, l:after] = s:select_fitting_buffers(a:before, a:current, a:after, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width)
+    let [l:before, l:current, l:after] = s:select_fitting_buffers(l:before_names, l:current_names, l:after_names, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width)
     " With s:more_buffers visible it is possible that buffers on another side don't fit anymore
-    let l:more_before = len(a:before) > len(l:before)
-    let l:more_after = len(a:after) > len(l:after)
+    let l:more_before = len(l:before_names) > len(l:before)
+    let l:more_after = len(l:after_names) > len(l:after)
     if l:more_before && l:more_after
       " Indeed, buffers on both sides don't fit now. Recompute, but account for s:more_buffers to be visible on both sides
-      let [l:before, l:current, l:after] = s:select_fitting_buffers(a:before, a:current, a:after, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width*2)
+      let [l:before, l:current, l:after] = s:select_fitting_buffers(l:before_names, l:current_names, l:after_names, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width*2)
       " Now add s:more_buffers on both sides
       let l:before = [s:more_buffers] + l:before
       let l:after += [s:more_buffers]
@@ -257,7 +258,7 @@ function! lightline#bufferline#buffers()
   let l:buffers = s:filtered_buffers()
   let l:current_index = index(l:buffers, bufnr('%'))
   if l:current_index == -1
-    return [s:get_buffer_names(l:buffers, 0, len(l:buffers)), [], []]
+    return [s:get_buffer_names(l:buffers, 0, len(l:buffers))[0], [], []]
   endif
   let l:before = s:get_buffer_names(l:buffers, 0, l:current_index)
   let l:current = s:get_buffer_names(l:buffers, l:current_index, l:current_index + 1)
