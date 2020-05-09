@@ -63,7 +63,6 @@ function! s:get_buffer_name(i, buffer)
   if getbufvar(a:buffer, '&mod')
     let l:name .= s:modified
   endif
-  echo l:name
   if s:show_basedir == 1 && bufname(a:buffer) !=# ''
     let l:name = fnamemodify(bufname(a:buffer), ':p:h:t') . '/' . l:name
   end
