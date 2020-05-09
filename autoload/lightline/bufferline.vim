@@ -10,6 +10,7 @@ let s:number_map          = get(g:, 'lightline#bufferline#number_map', {})
 let s:composed_number_map = get(g:, 'lightline#bufferline#composed_number_map', {})
 let s:shorten_path        = get(g:, 'lightline#bufferline#shorten_path', 1)
 let s:show_number         = get(g:, 'lightline#bufferline#show_number', 0)
+let s:show_basedir        = get(g:, 'lightline#bufferline#show_basedir', 0)
 let s:number_separator    = get(g:, 'lightline#bufferline#number_separator', ' ')
 let s:ordinal_separator   = get(g:, 'lightline#bufferline#ordinal_separator', '')
 let s:unnamed             = get(g:, 'lightline#bufferline#unnamed', '*')
@@ -62,6 +63,10 @@ function! s:get_buffer_name(i, buffer)
   if getbufvar(a:buffer, '&mod')
     let l:name .= s:modified
   endif
+  echo l:name
+  if s:show_basedir == 1 && bufname(a:buffer) !=# ''
+    let l:name = fnamemodify(bufname(a:buffer), ':p:h:t') . '/' . l:name
+  end
   if s:show_number == 1
     let l:name = a:buffer . s:number_separator . l:name
   elseif s:show_number == 2

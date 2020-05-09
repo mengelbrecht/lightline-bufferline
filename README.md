@@ -90,6 +90,10 @@ Valid values are:
 
 For ordinal number in option `2`, `3` and `4`, number maps `g:lightline#bufferline#number_map` and `g:lightline#bufferline#composed_number_map` are used as described below.
 
+##### `g:lightline#bufferline#show_basedir`
+
+Defines whether to add the buffer its base directory to the buffer name. Default is `0`.
+
 ##### `g:lightline#bufferline#composed_number_map`
 
 Dictionary mapping ordinal numbers to their alternative character representations. Default is `{}`.
