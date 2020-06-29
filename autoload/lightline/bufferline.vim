@@ -114,6 +114,13 @@ function! s:goto_nth_buffer(n)
   endif
 endfunction
 
+function! s:delete_nth_buffer(n)
+  let l:buffers = s:filtered_buffers()
+  if a:n < len(l:buffers)
+    execute 'bd' . l:buffers[a:n]
+  endif
+endfunction
+
 function! s:get_buffer_names(buffers, from, to)
   let l:names = []
   let l:lengths = []
@@ -280,3 +287,14 @@ noremap <silent> <Plug>lightline#bufferline#go(7)  :call <SID>goto_nth_buffer(6)
 noremap <silent> <Plug>lightline#bufferline#go(8)  :call <SID>goto_nth_buffer(7)<CR>
 noremap <silent> <Plug>lightline#bufferline#go(9)  :call <SID>goto_nth_buffer(8)<CR>
 noremap <silent> <Plug>lightline#bufferline#go(10) :call <SID>goto_nth_buffer(9)<CR>
+
+noremap <silent> <Plug>lightline#bufferline#delete(1)  :call <SID>delete_nth_buffer(0)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(2)  :call <SID>delete_nth_buffer(1)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(3)  :call <SID>delete_nth_buffer(2)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(4)  :call <SID>delete_nth_buffer(3)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(5)  :call <SID>delete_nth_buffer(4)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(6)  :call <SID>delete_nth_buffer(5)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(7)  :call <SID>delete_nth_buffer(6)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(8)  :call <SID>delete_nth_buffer(7)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(9)  :call <SID>delete_nth_buffer(8)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(10) :call <SID>delete_nth_buffer(9)<CR>
