@@ -197,6 +197,21 @@ nmap <Leader>9 <Plug>lightline#bufferline#go(9)
 nmap <Leader>0 <Plug>lightline#bufferline#go(10)
 ```
 
+Additionally you can use the following e.g. to delete buffers by their ordinal number.
+
+```viml
+nmap <Leader>1 <Plug>lightline#bufferline#delete(1)
+nmap <Leader>2 <Plug>lightline#bufferline#delete(2)
+nmap <Leader>3 <Plug>lightline#bufferline#delete(3)
+nmap <Leader>4 <Plug>lightline#bufferline#delete(4)
+nmap <Leader>5 <Plug>lightline#bufferline#delete(5)
+nmap <Leader>6 <Plug>lightline#bufferline#delete(6)
+nmap <Leader>7 <Plug>lightline#bufferline#delete(7)
+nmap <Leader>8 <Plug>lightline#bufferline#delete(8)
+nmap <Leader>9 <Plug>lightline#bufferline#delete(9)
+nmap <Leader>0 <Plug>lightline#bufferline#delete(10)
+```
+
 ## Example
 
 The following minimal example adds the bufferline to the lightline tabline and demonstrates a few custom bufferline options:
