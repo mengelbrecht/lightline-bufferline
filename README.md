@@ -177,6 +177,10 @@ If set to `1` the bufferline is clickable under Neovim versions with `tablineat`
 let g:lightline.component_raw = {'buffers': 1}
 ```
 
+##### `g:lightline#bufferline#multiwindow_mode`
+
+If set to `1` only the buffers that are displayed in those windows are listed in the tabline.
+
 ## Mappings
 
 This plugin provides Plug mappings to switch to buffers using their ordinal number in the bufferline.

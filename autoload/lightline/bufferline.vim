@@ -4,6 +4,7 @@
 
 scriptencoding utf-8
 
+let s:multiwindow_mode    = get(g:, 'lightline#bufferline#multiwindow_mode', 0)
 let s:filename_modifier   = get(g:, 'lightline#bufferline#filename_modifier', ':.')
 let s:min_buffer_count    = get(g:, 'lightline#bufferline#min_buffer_count', 0)
 let s:number_map          = get(g:, 'lightline#bufferline#number_map', {})
@@ -262,6 +263,11 @@ function! lightline#bufferline#init()
 endfunction
 
 function! lightline#bufferline#buffers()
+  if s:multiwindow_mode == 1 
+      if tabpagenr('$') > 1
+          return lightline#tabs()
+      endif
+  endif
   let l:buffers = s:filtered_buffers()
   let l:current_index = index(l:buffers, bufnr('%'))
   if l:current_index == -1
