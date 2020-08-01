@@ -16,6 +16,7 @@ let s:unnamed             = get(g:, 'lightline#bufferline#unnamed', '*')
 let s:reverse_buffers     = get(g:, 'lightline#bufferline#reverse_buffers', 0)
 let s:right_aligned       = get(g:, 'lightline#bufferline#right_aligned', 0)
 let s:enable_devicons     = get(g:, 'lightline#bufferline#enable_devicons', 0)
+let s:enable_nerdfont     = get(g:, 'lightline#bufferline#enable_nerdfont', 0)
 let s:unicode_symbols     = get(g:, 'lightline#bufferline#unicode_symbols', 0)
 if s:unicode_symbols == 0
   let s:modified          = get(g:, 'lightline#bufferline#modified', ' +')
@@ -55,6 +56,8 @@ function! s:get_buffer_name(i, buffer)
   endif
   if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
     let l:name = WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t')) . ' ' . l:name
+  elseif s:enable_nerdfont == 1 && exists('*nerdfont#find')
+    let l:name = nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0) . ' ' . l:name
   endif
   if s:is_read_only(a:buffer)
     let l:name .= s:read_only
