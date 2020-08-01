@@ -145,6 +145,11 @@ The name to use for unnamed buffers. Default is `'*'`.
 Enables the usage of [vim-devicons](https://github.com/ryanoasis/vim-devicons) to display a filetype icon for the buffer.
 Default is `0`.
 
+##### `g:lightline#bufferline#enable_nerdfont`
+
+Enables the usage of [nerdfont.vim](https://github.com/lambdalisue/nerdfont.vim) to display a filetype icon for the buffer.
+Default is `0`.
+
 ##### `g:lightline#bufferline#unicode_symbols`
 
 Use unicode symbols for modified and read-only buffers as well as the more buffers indicator. Default is `0`.
