@@ -56,8 +56,11 @@ function! s:get_buffer_name(i, buffer)
   endif
   if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
     let l:name = WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t')) . ' ' . l:name
-  elseif s:enable_nerdfont == 1 && exists('*nerdfont#find')
-    let l:name = nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0) . ' ' . l:name
+  elseif s:enable_nerdfont == 1
+    try
+      let l:name = nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0) . ' ' . l:name
+    catch /^Vim\%((\a\+)\)\=:E117:/
+    endtry
   endif
   if s:is_read_only(a:buffer)
     let l:name .= s:read_only
