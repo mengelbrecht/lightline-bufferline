@@ -1,6 +1,6 @@
-" Plugin:      https://github.com/mgee/lightline-bufferline
+" Plugin:      https://github.com/mengelbrecht/lightline-bufferline
 " Description: A lightweight bufferline for the lightline vim plugin.
-" Maintainer:  Markus Engelbrecht <https://github.com/mgee>
+" Maintainer:  Markus Engelbrecht <https://github.com/mengelbrecht>
 
 scriptencoding utf-8
 
