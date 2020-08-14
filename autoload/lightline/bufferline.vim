@@ -4,11 +4,13 @@
 
 scriptencoding utf-8
 
+let s:dirsep              = fnamemodify(getcwd(),':p')[-1:]
 let s:filename_modifier   = get(g:, 'lightline#bufferline#filename_modifier', ':.')
 let s:min_buffer_count    = get(g:, 'lightline#bufferline#min_buffer_count', 0)
 let s:number_map          = get(g:, 'lightline#bufferline#number_map', {})
 let s:composed_number_map = get(g:, 'lightline#bufferline#composed_number_map', {})
 let s:shorten_path        = get(g:, 'lightline#bufferline#shorten_path', 1)
+let s:smart_path          = get(g:, 'lightline#bufferline#smart_path', 1)
 let s:show_number         = get(g:, 'lightline#bufferline#show_number', 0)
 let s:number_separator    = get(g:, 'lightline#bufferline#number_separator', ' ')
 let s:ordinal_separator   = get(g:, 'lightline#bufferline#ordinal_separator', '')
@@ -44,8 +46,8 @@ function! lightline#bufferline#_click_handler(minwid, clicks, btn, modifiers)
   call s:goto_nth_buffer(a:minwid)
 endfunction
 
-function! s:get_buffer_name(i, buffer)
-  let l:name = bufname(a:buffer)
+function! s:get_buffer_name(i, buffer, path)
+  let l:name = a:path
   if l:name ==# ''
     let l:name = s:unnamed
   else
@@ -127,11 +129,54 @@ function! s:delete_nth_buffer(n)
   endif
 endfunction
 
+function! s:get_buffer_paths(buffers)
+  if (!s:smart_path)
+    return map(a:buffers, 'bufname(v:val)')
+  endif
+
+  let l:smart_buffers = []
+  let l:buffer_count_per_tail = {}
+
+  for l:buffer in a:buffers
+    let l:smart_buffer = {}
+    let l:name = bufname(l:buffer)
+
+    if strlen(l:name)
+      let l:smart_buffer.path = fnamemodify(l:name, ':p:~:.')
+      let l:smart_buffer.sep = strridx(l:smart_buffer.path, s:dirsep, strlen(l:smart_buffer.path) - 2)
+      let l:smart_buffer.label = l:smart_buffer.path[l:smart_buffer.sep + 1:]
+      let l:buffer_count_per_tail[l:smart_buffer.label] = get(l:buffer_count_per_tail, l:smart_buffer.label, 0) + 1
+    else
+      let l:smart_buffer.path = l:name
+      let l:smart_buffer.label = l:name
+    endif
+
+    call add(l:smart_buffers, l:smart_buffer)
+  endfor
+
+  while len(filter(l:buffer_count_per_tail, 'v:val > 1'))
+    let [ambiguous, l:buffer_count_per_tail] = [l:buffer_count_per_tail, {}]
+
+    for l:smart_buffer in l:smart_buffers
+      if strlen(l:smart_buffer.path)
+        if -1 < l:smart_buffer.sep && has_key(ambiguous, l:smart_buffer.label)
+          let l:smart_buffer.sep = strridx(l:smart_buffer.path, s:dirsep, l:smart_buffer.sep - 1)
+          let l:smart_buffer.label = l:smart_buffer.path[l:smart_buffer.sep + 1:]
+        endif
+        let l:buffer_count_per_tail[l:smart_buffer.label] = get(l:buffer_count_per_tail, l:smart_buffer.label, 0) + 1
+      endif
+    endfor
+  endwhile
+
+  return map(l:smart_buffers, 'v:val.label')
+endfunction
+
 function! s:get_buffer_names(buffers, from, to)
   let l:names = []
   let l:lengths = []
+  let l:buffer_paths = s:get_buffer_paths(a:buffers)
   for l:i in range(a:from, a:to - 1)
-    let [l:name, l:len] = s:get_buffer_name(l:i, a:buffers[l:i])
+    let [l:name, l:len] = s:get_buffer_name(l:i, a:buffers[l:i], l:buffer_paths[l:i])
     call add(l:names, l:name)
     call add(l:lengths, l:len + 4)
   endfor

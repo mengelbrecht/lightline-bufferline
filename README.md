@@ -77,6 +77,10 @@ The indicator to use for a read-only buffer. Default is `' -'`.
 
 Defines whether to shorten the path using the `pathshorten` function. Default is `1`.
 
+##### `g:lightline#bufferline#smart_path`
+
+If enabled, when two files have the same name the distinguishing sections of each file's path are added. Default is `1`.
+
 ##### `g:lightline#bufferline#show_number`
 
 Defines whether to add the buffer number to the buffer name. Default is `0`.
