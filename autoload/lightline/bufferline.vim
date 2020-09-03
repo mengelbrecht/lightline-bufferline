@@ -328,24 +328,32 @@ function! lightline#bufferline#buffers()
   endif
 endfunction
 
-noremap <silent> <Plug>lightline#bufferline#go(1)  :call <SID>goto_nth_buffer(0)<CR>
-noremap <silent> <Plug>lightline#bufferline#go(2)  :call <SID>goto_nth_buffer(1)<CR>
-noremap <silent> <Plug>lightline#bufferline#go(3)  :call <SID>goto_nth_buffer(2)<CR>
-noremap <silent> <Plug>lightline#bufferline#go(4)  :call <SID>goto_nth_buffer(3)<CR>
-noremap <silent> <Plug>lightline#bufferline#go(5)  :call <SID>goto_nth_buffer(4)<CR>
-noremap <silent> <Plug>lightline#bufferline#go(6)  :call <SID>goto_nth_buffer(5)<CR>
-noremap <silent> <Plug>lightline#bufferline#go(7)  :call <SID>goto_nth_buffer(6)<CR>
-noremap <silent> <Plug>lightline#bufferline#go(8)  :call <SID>goto_nth_buffer(7)<CR>
-noremap <silent> <Plug>lightline#bufferline#go(9)  :call <SID>goto_nth_buffer(8)<CR>
-noremap <silent> <Plug>lightline#bufferline#go(10) :call <SID>goto_nth_buffer(9)<CR>
+function! lightline#bufferline#goto_nth_buffer(n)
+  call s:goto_nth_buffer(a:n - 1)
+endfunction
 
-noremap <silent> <Plug>lightline#bufferline#delete(1)  :call <SID>delete_nth_buffer(0)<CR>
-noremap <silent> <Plug>lightline#bufferline#delete(2)  :call <SID>delete_nth_buffer(1)<CR>
-noremap <silent> <Plug>lightline#bufferline#delete(3)  :call <SID>delete_nth_buffer(2)<CR>
-noremap <silent> <Plug>lightline#bufferline#delete(4)  :call <SID>delete_nth_buffer(3)<CR>
-noremap <silent> <Plug>lightline#bufferline#delete(5)  :call <SID>delete_nth_buffer(4)<CR>
-noremap <silent> <Plug>lightline#bufferline#delete(6)  :call <SID>delete_nth_buffer(5)<CR>
-noremap <silent> <Plug>lightline#bufferline#delete(7)  :call <SID>delete_nth_buffer(6)<CR>
-noremap <silent> <Plug>lightline#bufferline#delete(8)  :call <SID>delete_nth_buffer(7)<CR>
-noremap <silent> <Plug>lightline#bufferline#delete(9)  :call <SID>delete_nth_buffer(8)<CR>
-noremap <silent> <Plug>lightline#bufferline#delete(10) :call <SID>delete_nth_buffer(9)<CR>
+function! lightline#bufferline#delete_nth_buffer(n)
+  call s:delete_nth_buffer(a:n - 1)
+endfunction
+
+noremap <silent> <Plug>lightline#bufferline#go(1)  :call lightline#bufferline#goto_nth_buffer(1)<CR>
+noremap <silent> <Plug>lightline#bufferline#go(2)  :call lightline#bufferline#goto_nth_buffer(2)<CR>
+noremap <silent> <Plug>lightline#bufferline#go(3)  :call lightline#bufferline#goto_nth_buffer(3)<CR>
+noremap <silent> <Plug>lightline#bufferline#go(4)  :call lightline#bufferline#goto_nth_buffer(4)<CR>
+noremap <silent> <Plug>lightline#bufferline#go(5)  :call lightline#bufferline#goto_nth_buffer(5)<CR>
+noremap <silent> <Plug>lightline#bufferline#go(6)  :call lightline#bufferline#goto_nth_buffer(6)<CR>
+noremap <silent> <Plug>lightline#bufferline#go(7)  :call lightline#bufferline#goto_nth_buffer(7)<CR>
+noremap <silent> <Plug>lightline#bufferline#go(8)  :call lightline#bufferline#goto_nth_buffer(8)<CR>
+noremap <silent> <Plug>lightline#bufferline#go(9)  :call lightline#bufferline#goto_nth_buffer(9)<CR>
+noremap <silent> <Plug>lightline#bufferline#go(10) :call lightline#bufferline#goto_nth_buffer(10)<CR>
+
+noremap <silent> <Plug>lightline#bufferline#delete(1)  :call lightline#bufferline#delete_nth_buffer(1)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(2)  :call lightline#bufferline#delete_nth_buffer(2)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(3)  :call lightline#bufferline#delete_nth_buffer(3)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(4)  :call lightline#bufferline#delete_nth_buffer(4)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(5)  :call lightline#bufferline#delete_nth_buffer(5)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(6)  :call lightline#bufferline#delete_nth_buffer(6)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(7)  :call lightline#bufferline#delete_nth_buffer(7)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(8)  :call lightline#bufferline#delete_nth_buffer(8)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(9)  :call lightline#bufferline#delete_nth_buffer(9)<CR>
+noremap <silent> <Plug>lightline#bufferline#delete(10) :call lightline#bufferline#delete_nth_buffer(10)<CR>

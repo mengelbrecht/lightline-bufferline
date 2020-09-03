@@ -221,6 +221,26 @@ nmap <Leader>c9 <Plug>lightline#bufferline#delete(9)
 nmap <Leader>c0 <Plug>lightline#bufferline#delete(10)
 ```
 
+## Functions
+
+This plugin provides some public functions to operate with buffers using their ordinal number.
+
+#### `lightline#bufferline#goto_nth_buffer(n)`
+
+This function switches to the buffer with the ordinal number specified by parameter `n`.
+To switch to the first buffer using a mapping you can use the function like this:
+```viml
+nmap <Leader>1 :call lightline#bufferline#goto_nth_buffer(1)<CR>
+```
+
+#### `lightline#bufferline#delete_nth_buffer(n)`
+
+This function deletes the buffer with the ordinal number specified by parameter `n`.
+To delete the first buffer using a mapping you can use the function like this:
+```viml
+nmap <D-1> :call lightline#bufferline#delete_nth_buffer(1)<CR>
+```
+
 ## Example
 
 The following minimal example adds the bufferline to the lightline tabline and demonstrates a few custom bufferline options:
