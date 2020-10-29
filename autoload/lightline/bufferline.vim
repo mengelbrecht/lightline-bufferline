@@ -131,7 +131,7 @@ endfunction
 
 function! s:get_buffer_paths(buffers)
   if (!s:smart_path)
-    return map(a:buffers, 'bufname(v:val)')
+    return map(copy(a:buffers), 'bufname(v:val)')
   endif
 
   let l:smart_buffers = []
