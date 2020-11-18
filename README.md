@@ -173,6 +173,11 @@ Default is `0` (no auto-show behavior).
 If enabled the buffers will be displayed in a reversed order.
 Default is `0` (buffers are not reversed).
 
+##### `g:lightline#bufferline#reverse_buffer_icons`
+
+If set to `1`, buffer icons are displayed on the right side of the file name.
+If `0`, it will be displayed on the left side. Default is `0`.
+
 ##### `g:lightline#bufferline#right_aligned`
 
 If the bufferline is used in the `right` component of the tabline this should be set to `1` to ensure the correct order of the buffers.
@@ -229,6 +234,7 @@ This plugin provides some public functions to operate with buffers using their o
 
 This function switches to the buffer with the ordinal number specified by parameter `n`.
 To switch to the first buffer using a mapping you can use the function like this:
+
 ```viml
 nmap <Leader>1 :call lightline#bufferline#go(1)<CR>
 ```
@@ -237,6 +243,7 @@ nmap <Leader>1 :call lightline#bufferline#go(1)<CR>
 
 This function deletes the buffer with the ordinal number specified by parameter `n`.
 To delete the first buffer using a mapping you can use the function like this:
+
 ```viml
 nmap <D-1> :call lightline#bufferline#delete(1)<CR>
 ```

@@ -16,6 +16,7 @@ let s:number_separator    = get(g:, 'lightline#bufferline#number_separator', ' '
 let s:ordinal_separator   = get(g:, 'lightline#bufferline#ordinal_separator', '')
 let s:unnamed             = get(g:, 'lightline#bufferline#unnamed', '*')
 let s:reverse_buffers     = get(g:, 'lightline#bufferline#reverse_buffers', 0)
+let s:reverse_buffer_icons     = get(g:, 'lightline#bufferline#reverse_buffer_icon', 0)
 let s:right_aligned       = get(g:, 'lightline#bufferline#right_aligned', 0)
 let s:enable_devicons     = get(g:, 'lightline#bufferline#enable_devicons', 0)
 let s:enable_nerdfont     = get(g:, 'lightline#bufferline#enable_nerdfont', 0)
@@ -71,13 +72,13 @@ function! s:get_buffer_name(i, buffer, path)
       let l:name = pathshorten(l:name)
     endif
   endif
-  if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
+  if exists('*WebDevIconsGetFileTypeSymbol') && (s:enable_devicons == 1 && s:reverse_buffer_icons == 0)
     let l:name = WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t')) . ' ' . l:name
-  elseif s:enable_devicons == 1 && has('nvim-0.5') && exists('g:nvim_web_devicons')
-    let l:name = v:lua._bufferline_get_icon(bufname(a:buffer)) . ' ' . l:name
+  elseif s:reverse_buffer_icons == 1
+    let l:name = l:name . ' ' . WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t'))
   elseif s:enable_nerdfont == 1
-    try
-      let l:name = nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0) . ' ' . l:name
+  try
+    let l:name = nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0) . ' ' . l:name
     catch /^Vim\%((\a\+)\)\=:E117:/
     endtry
   endif
