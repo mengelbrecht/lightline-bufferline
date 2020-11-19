@@ -72,14 +72,16 @@ function! s:get_buffer_name(i, buffer, path)
       let l:name = pathshorten(l:name)
     endif
   endif
-  if exists('*WebDevIconsGetFileTypeSymbol') && (s:enable_devicons == 1 && s:reverse_buffer_icons == 0)
+  if exists('*WebDevIconsGetFileTypeSymbol') && s:enable_devicons == 1 && s:reverse_buffer_icons == 0
     let l:name = WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t')) . ' ' . l:name
   elseif s:reverse_buffer_icons == 1
     let l:name = l:name . ' ' . WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t'))
+  elseif s:enable_devicons == 1 && has('nvim-0.5') && exists('g:nvim_web_devicons')
+    let l:name = v:lua._bufferline_get_icon(bufname(a:buffer)) . ' ' . l:name
   elseif s:enable_nerdfont == 1
-  try
-    let l:name = nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0) . ' ' . l:name
-    catch /^Vim\%((\a\+)\)\=:E117:/
+    try
+      let l:name = nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0) . ' ' . l:name
+      catch /^Vim\%((\a\+)\)\=:E117:/
     endtry
   endif
   if s:is_read_only(a:buffer)
