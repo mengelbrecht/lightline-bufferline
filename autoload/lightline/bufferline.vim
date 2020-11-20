@@ -4,38 +4,38 @@
 
 scriptencoding utf-8
 
-let s:dirsep              = fnamemodify(getcwd(),':p')[-1:]
-let s:filename_modifier   = get(g:, 'lightline#bufferline#filename_modifier', ':.')
-let s:min_buffer_count    = get(g:, 'lightline#bufferline#min_buffer_count', 0)
-let s:number_map          = get(g:, 'lightline#bufferline#number_map', {})
-let s:composed_number_map = get(g:, 'lightline#bufferline#composed_number_map', {})
-let s:shorten_path        = get(g:, 'lightline#bufferline#shorten_path', 1)
-let s:smart_path          = get(g:, 'lightline#bufferline#smart_path', 1)
-let s:show_number         = get(g:, 'lightline#bufferline#show_number', 0)
-let s:number_separator    = get(g:, 'lightline#bufferline#number_separator', ' ')
-let s:ordinal_separator   = get(g:, 'lightline#bufferline#ordinal_separator', '')
-let s:unnamed             = get(g:, 'lightline#bufferline#unnamed', '*')
-let s:reverse_buffers     = get(g:, 'lightline#bufferline#reverse_buffers', 0)
-let s:reverse_buffer_icons     = get(g:, 'lightline#bufferline#reverse_buffer_icon', 0)
-let s:right_aligned       = get(g:, 'lightline#bufferline#right_aligned', 0)
-let s:enable_devicons     = get(g:, 'lightline#bufferline#enable_devicons', 0)
-let s:enable_nerdfont     = get(g:, 'lightline#bufferline#enable_nerdfont', 0)
-let s:unicode_symbols     = get(g:, 'lightline#bufferline#unicode_symbols', 0)
+let s:dirsep                = fnamemodify(getcwd(),':p')[-1:]
+let s:filename_modifier     = get(g:, 'lightline#bufferline#filename_modifier', ':.')
+let s:min_buffer_count      = get(g:, 'lightline#bufferline#min_buffer_count', 0)
+let s:number_map            = get(g:, 'lightline#bufferline#number_map', {})
+let s:composed_number_map   = get(g:, 'lightline#bufferline#composed_number_map', {})
+let s:shorten_path          = get(g:, 'lightline#bufferline#shorten_path', 1)
+let s:smart_path            = get(g:, 'lightline#bufferline#smart_path', 1)
+let s:show_number           = get(g:, 'lightline#bufferline#show_number', 0)
+let s:number_separator      = get(g:, 'lightline#bufferline#number_separator', ' ')
+let s:ordinal_separator     = get(g:, 'lightline#bufferline#ordinal_separator', '')
+let s:unnamed               = get(g:, 'lightline#bufferline#unnamed', '*')
+let s:reverse_buffers       = get(g:, 'lightline#bufferline#reverse_buffers', 0)
+let s:reverse_buffer_icons  = get(g:, 'lightline#bufferline#reverse_buffer_icons', 0)
+let s:right_aligned         = get(g:, 'lightline#bufferline#right_aligned', 0)
+let s:enable_devicons       = get(g:, 'lightline#bufferline#enable_devicons', 0)
+let s:enable_nerdfont       = get(g:, 'lightline#bufferline#enable_nerdfont', 0)
+let s:unicode_symbols       = get(g:, 'lightline#bufferline#unicode_symbols', 0)
 if s:unicode_symbols == 0
-  let s:modified          = get(g:, 'lightline#bufferline#modified', ' +')
-  let s:read_only         = get(g:, 'lightline#bufferline#read_only', ' -')
-  let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '...')
+  let s:modified            = get(g:, 'lightline#bufferline#modified', ' +')
+  let s:read_only           = get(g:, 'lightline#bufferline#read_only', ' -')
+  let s:more_buffers        = get(g:, 'lightline#bufferline#more_buffers', '...')
 else
-  let s:modified          = get(g:, 'lightline#bufferline#modified', ' ✎')
-  let s:read_only         = get(g:, 'lightline#bufferline#read_only', ' ')
-  let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '…')
+  let s:modified            = get(g:, 'lightline#bufferline#modified', ' ✎')
+  let s:read_only           = get(g:, 'lightline#bufferline#read_only', ' ')
+  let s:more_buffers        = get(g:, 'lightline#bufferline#more_buffers', '…')
 endif
 if exists('g:lightline.component_raw.buffers')
-  let s:component_is_raw  = g:lightline.component_raw.buffers
+  let s:component_is_raw   = g:lightline.component_raw.buffers
 else
-  let s:component_is_raw  = 0
+  let s:component_is_raw   = 0
 endif
-let s:clickable           = has('tablineat') && s:component_is_raw ? get(g:, 'lightline#bufferline#clickable', 0) : 0
+let s:clickable            = has('tablineat') && s:component_is_raw ? get(g:, 'lightline#bufferline#clickable', 0) : 0
 if s:component_is_raw
   let s:more_buffers = ' ' . s:more_buffers . ' '
   let s:more_buffers_width = len(s:more_buffers)
@@ -72,18 +72,31 @@ function! s:get_buffer_name(i, buffer, path)
       let l:name = pathshorten(l:name)
     endif
   endif
-  if exists('*WebDevIconsGetFileTypeSymbol') && s:enable_devicons == 1 && s:reverse_buffer_icons == 0
-    let l:name = WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t')) . ' ' . l:name
-  elseif s:reverse_buffer_icons == 1
-    let l:name = l:name . ' ' . WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t'))
-  elseif s:enable_devicons == 1 && has('nvim-0.5') && exists('g:nvim_web_devicons')
-    let l:name = v:lua._bufferline_get_icon(bufname(a:buffer)) . ' ' . l:name
-  elseif s:enable_nerdfont == 1
-    try
-      let l:name = nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0) . ' ' . l:name
+
+  function! s:get_icon(buffer)
+    if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
+      return WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t'))
+    endif
+
+    if s:enable_devicons == 1 && has('nvim-0.5') && exists('g:nvim_web_devicons')
+      return v:lua._bufferline_get_icon(bufname(a:buffer))
+    endif
+
+    if s:enable_nerdfont == 1
+      try
+        return nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0)
       catch /^Vim\%((\a\+)\)\=:E117:/
-    endtry
+      endtry
+    endif
+
+    return ''
+  endfunction
+
+  let l:icon = s:get_icon(a:buffer)
+  if l:icon != ''
+    let l:name = s:reverse_buffer_icons == 0 ? (l:icon . ' ' . l:name) : (l:name . ' ' . l:icon)
   endif
+
   if s:is_read_only(a:buffer)
     let l:name .= s:read_only
   endif
