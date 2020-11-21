@@ -19,6 +19,7 @@ let s:reverse_buffers     = get(g:, 'lightline#bufferline#reverse_buffers', 0)
 let s:right_aligned       = get(g:, 'lightline#bufferline#right_aligned', 0)
 let s:enable_devicons     = get(g:, 'lightline#bufferline#enable_devicons', 0)
 let s:enable_nerdfont     = get(g:, 'lightline#bufferline#enable_nerdfont', 0)
+let s:icon_position       = get(g:, 'lightline#bufferline#icon_position', 'left')
 let s:unicode_symbols     = get(g:, 'lightline#bufferline#unicode_symbols', 0)
 if s:unicode_symbols == 0
   let s:modified          = get(g:, 'lightline#bufferline#modified', ' +')
@@ -71,16 +72,12 @@ function! s:get_buffer_name(i, buffer, path)
       let l:name = pathshorten(l:name)
     endif
   endif
-  if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
-    let l:name = WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t')) . ' ' . l:name
-  elseif s:enable_devicons == 1 && has('nvim-0.5') && exists('g:nvim_web_devicons')
-    let l:name = v:lua._bufferline_get_icon(bufname(a:buffer)) . ' ' . l:name
-  elseif s:enable_nerdfont == 1
-    try
-      let l:name = nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0) . ' ' . l:name
-    catch /^Vim\%((\a\+)\)\=:E117:/
-    endtry
+
+  let l:icon = s:get_icon(a:buffer)
+  if l:icon != ''
+    let l:name = s:icon_position ==? 'right' ?  (l:name . ' ' . l:icon) : (l:icon . ' ' . l:name)
   endif
+
   if s:is_read_only(a:buffer)
     let l:name .= s:read_only
   endif
@@ -106,6 +103,25 @@ function! s:get_buffer_name(i, buffer, path)
   else
     return [l:name, l:len]
   endif
+endfunction
+
+function! s:get_icon(buffer)
+  if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
+    return WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t'))
+  endif
+
+  if s:enable_devicons == 1 && has('nvim-0.5') && exists('g:nvim_web_devicons')
+    return v:lua._bufferline_get_icon(bufname(a:buffer))
+  endif
+
+  if s:enable_nerdfont == 1
+    try
+      return nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0)
+    catch /^Vim\%((\a\+)\)\=:E117:/
+    endtry
+  endif
+
+  return ''
 endfunction
 
 function! s:get_from_number_map(i)

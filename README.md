@@ -154,6 +154,11 @@ Default is `0`.
 Enables the usage of [nerdfont.vim](https://github.com/lambdalisue/nerdfont.vim) to display a filetype icon for the buffer.
 Default is `0`.
 
+##### `g:lightline#bufferline#icon_position`
+
+If set to `right`, filetype icons are displayed on the right side of the file name.
+If `left` or omitted, it will be displayed on the left side. Default is `left`.
+
 ##### `g:lightline#bufferline#unicode_symbols`
 
 Use unicode symbols for modified and read-only buffers as well as the more buffers indicator. Default is `0`.
@@ -229,6 +234,7 @@ This plugin provides some public functions to operate with buffers using their o
 
 This function switches to the buffer with the ordinal number specified by parameter `n`.
 To switch to the first buffer using a mapping you can use the function like this:
+
 ```viml
 nmap <Leader>1 :call lightline#bufferline#go(1)<CR>
 ```
@@ -237,6 +243,7 @@ nmap <Leader>1 :call lightline#bufferline#go(1)<CR>
 
 This function deletes the buffer with the ordinal number specified by parameter `n`.
 To delete the first buffer using a mapping you can use the function like this:
+
 ```viml
 nmap <D-1> :call lightline#bufferline#delete(1)<CR>
 ```
