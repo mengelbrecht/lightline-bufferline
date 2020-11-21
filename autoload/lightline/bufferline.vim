@@ -73,25 +73,6 @@ function! s:get_buffer_name(i, buffer, path)
     endif
   endif
 
-  function! s:get_icon(buffer)
-    if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
-      return WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t'))
-    endif
-
-    if s:enable_devicons == 1 && has('nvim-0.5') && exists('g:nvim_web_devicons')
-      return v:lua._bufferline_get_icon(bufname(a:buffer))
-    endif
-
-    if s:enable_nerdfont == 1
-      try
-        return nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0)
-      catch /^Vim\%((\a\+)\)\=:E117:/
-      endtry
-    endif
-
-    return ''
-  endfunction
-
   let l:icon = s:get_icon(a:buffer)
   if l:icon != ''
     let l:name = s:reverse_buffer_icons == 0 ? (l:icon . ' ' . l:name) : (l:name . ' ' . l:icon)
@@ -122,6 +103,25 @@ function! s:get_buffer_name(i, buffer, path)
   else
     return [l:name, l:len]
   endif
+endfunction
+
+function! s:get_icon(buffer)
+  if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
+    return WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t'))
+  endif
+
+  if s:enable_devicons == 1 && has('nvim-0.5') && exists('g:nvim_web_devicons')
+    return v:lua._bufferline_get_icon(bufname(a:buffer))
+  endif
+
+  if s:enable_nerdfont == 1
+    try
+      return nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0)
+    catch /^Vim\%((\a\+)\)\=:E117:/
+    endtry
+  endif
+
+  return ''
 endfunction
 
 function! s:get_from_number_map(i)
