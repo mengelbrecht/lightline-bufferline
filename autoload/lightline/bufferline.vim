@@ -114,7 +114,7 @@ function! s:get_icon(buffer)
     return v:lua._bufferline_get_icon(bufname(a:buffer))
   endif
 
- if s:enable_nerdfont == 1
+  if s:enable_nerdfont == 1
     try
       return nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0)
     catch /^Vim\%((\a\+)\)\=:E117:/

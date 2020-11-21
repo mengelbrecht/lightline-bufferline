@@ -157,8 +157,7 @@ Default is `0`.
 ##### `g:lightline#bufferline#icon_position`
 
 If set to `right`, filetype icons are displayed on the right side of the file name.
-If `left` or omitted, it will be displayed on the left side.
-Default is `left`.
+If `left` or omitted, it will be displayed on the left side. Default is `left`.
 
 ##### `g:lightline#bufferline#unicode_symbols`
 
