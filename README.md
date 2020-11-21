@@ -154,6 +154,11 @@ Default is `0`.
 Enables the usage of [nerdfont.vim](https://github.com/lambdalisue/nerdfont.vim) to display a filetype icon for the buffer.
 Default is `0`.
 
+##### `g:lightline#bufferline#icon_position`
+
+If set to `right`, filetype icons are displayed on the right side of the file name.
+If `left` or omitted, it will be displayed on the left side. Default is `left`.
+
 ##### `g:lightline#bufferline#unicode_symbols`
 
 Use unicode symbols for modified and read-only buffers as well as the more buffers indicator. Default is `0`.
@@ -172,11 +177,6 @@ Default is `0` (no auto-show behavior).
 
 If enabled the buffers will be displayed in a reversed order.
 Default is `0` (buffers are not reversed).
-
-##### `g:lightline#bufferline#reverse_buffer_icons`
-
-If set to `1`, buffer icons are displayed on the right side of the file name.
-If `0`, it will be displayed on the left side. Default is `0`.
 
 ##### `g:lightline#bufferline#right_aligned`
 
