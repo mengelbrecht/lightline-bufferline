@@ -165,17 +165,34 @@ function! s:filtered_buffers()
   return l:buffers
 endfunction
 
-function! s:goto_nth_buffer(n)
+function! s:get_buffer_for_ordinal_number(n)
   let l:buffers = s:filtered_buffers()
   if a:n < len(l:buffers)
-    execute 'b' . l:buffers[a:n]
+    return l:buffers[a:n]
+  endif
+  return -1
+endfunction
+
+function! s:get_ordinal_number_for_buffer(buffer)
+  let l:buffers = s:filtered_buffers()
+  let l:i = index(l:buffers, a:buffer)
+  if l:i >= 0
+    return l:i + 1
+  endif
+  return -1
+endfunction
+
+function! s:goto_nth_buffer(n)
+  let l:buffer = s:get_buffer_for_ordinal_number(a:n)
+  if l:buffer >= 0
+    execute 'b' . l:buffer
   endif
 endfunction
 
 function! s:delete_nth_buffer(n)
-  let l:buffers = s:filtered_buffers()
-  if a:n < len(l:buffers)
-    execute 'bd' . l:buffers[a:n]
+  let l:buffer = s:get_buffer_for_ordinal_number(a:n)
+  if l:buffer >= 0
+    execute 'bd' . l:buffer
   endif
 endfunction
 
@@ -384,6 +401,14 @@ endfunction
 
 function! lightline#bufferline#delete(n)
   call s:delete_nth_buffer(a:n - 1)
+endfunction
+
+function! lightline#bufferline#get_ordinal_number_for_buffer(buffer)
+  return s:get_ordinal_number_for_buffer(a:buffer)
+endfunction
+
+function! lightline#bufferline#get_buffer_for_ordinal_number(n)
+  return s:get_buffer_for_ordinal_number(a:n - 1)
 endfunction
 
 noremap <silent> <Plug>lightline#bufferline#go(1)  :call lightline#bufferline#go(1)<CR>

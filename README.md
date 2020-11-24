@@ -234,6 +234,14 @@ nmap <Leader>c0 <Plug>lightline#bufferline#delete(10)
 
 This plugin provides some public functions to operate with buffers using their ordinal number.
 
+#### `lightline#bufferline#get_ordinal_number_for_buffer(buffer)`
+
+This function returns the ordinal number for the given `buffer` or `-1` if the buffer is not found.
+
+#### `lightline#bufferline#get_buffer_for_ordinal_number(n)`
+
+This function returns the buffer for the ordinal number specified by parameter `n` or `-1` if no buffer is found.
+
 #### `lightline#bufferline#go(n)`
 
 This function switches to the buffer with the ordinal number specified by parameter `n`.
