@@ -74,7 +74,18 @@ function! s:get_buffer_name(i, buffer, path)
   endif
 
   let l:icon = s:get_icon(a:buffer)
-  if l:icon != ''
+  let l:number = s:get_number(a:i, a:buffer)
+  if l:number != '' && l:icon != ''
+    if s:icon_position ==? 'first'
+      let l:name = l:icon . ' ' . l:number . l:name
+    elseif s:icon_position ==? 'right'
+      let l:name = l:number . l:name . ' ' . l:icon
+    else
+      let l:name = l:number . l:icon . ' ' . l:name
+    endif
+  elseif l:number != ''
+    let l:name = l:number . l:name
+  elseif l:icon != ''
     let l:name = s:icon_position ==? 'right' ?  (l:name . ' ' . l:icon) : (l:icon . ' ' . l:name)
   endif
 
@@ -84,15 +95,7 @@ function! s:get_buffer_name(i, buffer, path)
   if getbufvar(a:buffer, '&mod')
     let l:name .= s:modified
   endif
-  if s:show_number == 1
-    let l:name = a:buffer . s:number_separator . l:name
-  elseif s:show_number == 2
-    let l:name = s:get_from_number_map(a:i + 1). s:number_separator . l:name
-  elseif s:show_number == 3
-    let l:name = a:buffer . s:ordinal_separator . s:get_from_number_map(a:i + 1) . s:number_separator . l:name
-  elseif s:show_number == 4
-    let l:name = s:get_from_number_map(a:i + 1) . s:ordinal_separator . a:buffer . s:number_separator . l:name
-  endif
+
   let l:len = len(l:name)
   let l:name = substitute(l:name, '%', '%%', 'g')
   if s:component_is_raw
@@ -119,6 +122,20 @@ function! s:get_icon(buffer)
       return nerdfont#find(fnamemodify(bufname(a:buffer), ':t'), 0)
     catch /^Vim\%((\a\+)\)\=:E117:/
     endtry
+  endif
+
+  return ''
+endfunction
+
+function! s:get_number(i, buffer)
+  if s:show_number == 1
+    return a:buffer . s:number_separator
+  elseif s:show_number == 2
+    return s:get_from_number_map(a:i + 1). s:number_separator
+  elseif s:show_number == 3
+    return a:buffer . s:ordinal_separator . s:get_from_number_map(a:i + 1) . s:number_separator
+  elseif s:show_number == 4
+    return s:get_from_number_map(a:i + 1) . s:ordinal_separator . a:buffer . s:number_separator
   endif
 
   return ''
