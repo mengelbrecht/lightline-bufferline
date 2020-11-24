@@ -357,7 +357,7 @@ function! lightline#bufferline#init()
     autocmd!
     if s:min_buffer_count > 0
       autocmd BufEnter  * call <SID>auto_tabline(len(<SID>filtered_buffers()))
-      autocmd BufUnload * call <SID>auto_tabline(len(<SID>filtered_buffers()) - 1)
+      autocmd BufDelete * call <SID>auto_tabline(len(<SID>filtered_buffers()) - 1)
     endif
   augroup END
 endfunction
