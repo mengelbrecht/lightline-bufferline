@@ -167,7 +167,7 @@ endfunction
 
 function! s:get_buffer_for_ordinal_number(n)
   let l:buffers = s:filtered_buffers()
-  if a:n < len(l:buffers)
+  if a:n >= 0 && a:n < len(l:buffers)
     return l:buffers[a:n]
   endif
   return -1
