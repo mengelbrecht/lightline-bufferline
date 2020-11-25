@@ -357,8 +357,8 @@ function! s:is_read_only(buffer)
     return (l:readonly || !l:modifiable) && getbufvar(a:buffer, '&filetype') !=# 'help'
 endfunction
 
-function! s:auto_tabline(buffer_count) abort
-  if a:buffer_count >= s:min_buffer_count
+function! s:auto_tabline() abort
+  if len(s:filtered_buffers()) >= s:min_buffer_count
     if &showtabline != 2 && &lines > 3
       set showtabline=2
     endif
@@ -373,8 +373,8 @@ function! lightline#bufferline#init()
   augroup lightline_bufferline
     autocmd!
     if s:min_buffer_count > 0
-      autocmd BufEnter  * call <SID>auto_tabline(len(<SID>filtered_buffers()))
-      autocmd BufDelete * call <SID>auto_tabline(len(<SID>filtered_buffers()) - 1)
+      autocmd BufEnter  * call <SID>auto_tabline()
+      autocmd BufDelete * call <SID>auto_tabline()
     endif
   augroup END
 endfunction
