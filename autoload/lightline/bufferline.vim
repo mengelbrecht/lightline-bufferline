@@ -7,6 +7,8 @@ scriptencoding utf-8
 let s:dirsep              = fnamemodify(getcwd(),':p')[-1:]
 let s:filename_modifier   = get(g:, 'lightline#bufferline#filename_modifier', ':.')
 let s:min_buffer_count    = get(g:, 'lightline#bufferline#min_buffer_count', 0)
+let s:margin_left         = get(g:, 'lightline#bufferline#margin_left', 0)
+let s:margin_right        = get(g:, 'lightline#bufferline#margin_right', 0)
 let s:number_map          = get(g:, 'lightline#bufferline#number_map', {})
 let s:composed_number_map = get(g:, 'lightline#bufferline#composed_number_map', {})
 let s:shorten_path        = get(g:, 'lightline#bufferline#shorten_path', 1)
@@ -95,6 +97,8 @@ function! s:get_buffer_name(i, buffer, path)
   if getbufvar(a:buffer, '&mod')
     let l:name .= s:modified
   endif
+
+  let l:name = repeat(' ', s:margin_left) . l:name . repeat(' ', s:margin_right)
 
   let l:len = len(l:name)
   let l:name = substitute(l:name, '%', '%%', 'g')

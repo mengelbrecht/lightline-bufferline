@@ -177,6 +177,14 @@ The minimum number of buffers needed to automatically show the tabline.
 When the buffer count falls below this number, the tabline will be hidden once again.
 Default is `0` (no auto-show behavior).
 
+##### `g:lightline#bufferline#margin_left`
+
+The number of spaces to add on the left side of the buffer name. Default is `0`.
+
+##### `g:lightline#bufferline#margin_right`
+
+The number of spaces to add on the right side of the buffer name. Default is `0`.
+
 ##### `g:lightline#bufferline#reverse_buffers`
 
 If enabled the buffers will be displayed in a reversed order.
