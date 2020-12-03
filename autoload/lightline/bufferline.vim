@@ -49,21 +49,6 @@ function! lightline#bufferline#_click_handler(minwid, clicks, btn, modifiers)
   call s:goto_nth_buffer(a:minwid)
 endfunction
 
-if has('nvim-0.5') && exists('g:nvim_web_devicons')
-  lua <<EOF
-  function _G._bufferline_get_icon(path)
-    local filename = vim.api.nvim_eval("fnamemodify('"..path.."', ':t')")
-    local extension = vim.api.nvim_eval("fnamemodify('"..path.."', ':e')")
-    local icon, hl_group = require'nvim-web-devicons'.get_icon(filename, extension, { default = true })
-    if icon then
-      return icon
-    else
-      return ""
-    end
-  end
-EOF
-endif
-
 function! s:get_buffer_name(i, buffer, path)
   let l:name = a:path
   if l:name ==# ''
@@ -115,10 +100,6 @@ endfunction
 function! s:get_icon(buffer)
   if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
     return WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t'))
-  endif
-
-  if s:enable_devicons == 1 && has('nvim-0.5') && exists('g:nvim_web_devicons')
-    return v:lua._bufferline_get_icon(bufname(a:buffer))
   endif
 
   if s:enable_nerdfont == 1
