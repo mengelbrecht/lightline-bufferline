@@ -45,7 +45,6 @@ if s:component_is_raw
 else
   let s:more_buffers_width = len(s:more_buffers) + 2
 endif
-let s:auto_hide_timer = -1
 
 function! lightline#bufferline#_click_handler(minwid, clicks, btn, modifiers)
   call s:goto_nth_buffer(a:minwid)
@@ -346,13 +345,13 @@ endfunction
 
 function! s:auto_tabline() abort
   if s:auto_hide > 0
-    if s:auto_hide_timer > -1
+    if exists('s:auto_hide_timer')
       call timer_stop(s:auto_hide_timer)
     endif
     if &showtabline != 2
       set showtabline=2
     endif
-    let s:auto_hide_timer = timer_start(s:auto_hide, 'lightline#bufferline#hide_timer')
+    let s:auto_hide_timer = timer_start(s:auto_hide, function('s:hide_timer'))
   elseif s:min_buffer_count > 0
     if len(s:filtered_buffers()) >= s:min_buffer_count
       if &showtabline != 2 && &lines > 3
@@ -366,11 +365,11 @@ function! s:auto_tabline() abort
   endif
 endfunction
 
-function! lightline#bufferline#hide_timer(timer)
+function! s:hide_timer(...) abort
   if &showtabline != 0
     set showtabline=0
   endif
-  let s:auto_hide_timer = -1
+  unlet s:auto_hide_timer
 endfunction
 
 function! lightline#bufferline#init()
