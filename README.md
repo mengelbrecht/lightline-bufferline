@@ -171,6 +171,16 @@ If set to `1` the symbols `+`, `-` and `...` are replaced by `✎`, `` and `�
 
 _Note: The symbols are only correctly displayed if your font supports these characters._
 
+##### `g:lightline#bufferline#auto_hide`
+
+Automatically hides the bufferline `n` milliseconds after switching the buffer.
+For example to show the bufferline for 4 seconds when switching the buffer and hide it afterwards use the following setting:
+```viml
+let g:lightline#bufferline#auto_hide = 4000
+```
+
+Default is `0` and disables the auto-hide behaviour.
+
 ##### `g:lightline#bufferline#min_buffer_count`
 
 The minimum number of buffers needed to automatically show the tabline.
