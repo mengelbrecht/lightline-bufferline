@@ -2,7 +2,7 @@
 
 This plugin provides bufferline functionality for the [lightline](https://github.com/itchyny/lightline.vim) vim plugin.
 
-<p align="center"><img src="bufferline.png" width="836" height="560"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/wiki/mengelbrecht/lightline-bufferline/images/bufferline.png" width="843"></p>
 
 ## Table Of Contents
 
