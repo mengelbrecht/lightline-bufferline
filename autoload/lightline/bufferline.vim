@@ -343,7 +343,9 @@ function! s:is_read_only(buffer)
     return (l:readonly || !l:modifiable) && getbufvar(a:buffer, '&filetype') !=# 'help'
 endfunction
 
-function! s:auto_tabline() abort
+function! s:auto_tabline_timer(...) abort
+  unlet s:auto_tabline_timer
+
   if s:auto_hide > 0
     if exists('s:auto_hide_timer')
       call timer_stop(s:auto_hide_timer)
@@ -362,6 +364,12 @@ function! s:auto_tabline() abort
         set showtabline=0
       endif
     endif
+  endif
+endfunction
+
+function! s:auto_tabline() abort
+  if !exists('s:auto_tabline_timer')
+      let s:auto_tabline_timer = timer_start(10, function('s:auto_tabline_timer'))
   endif
 endfunction
 
