@@ -102,7 +102,7 @@ function! s:get_icon(buffer)
   if s:enable_devicons == 1 && exists('*WebDevIconsGetFileTypeSymbol')
     return WebDevIconsGetFileTypeSymbol(fnamemodify(bufname(a:buffer), ':t'))
   elseif s:enable_devicons == 1 && has('nvim-0.5') && exists('g:nvim_web_devicons')
-    return luaeval("require('bufferline')._get_icon('" . bufname(a:buffer) . "')")
+    return luaeval("require('bufferline')._get_icon(vim.fn.bufname(" . a:buffer . "))")
   endif
 
   if s:enable_nerdfont == 1
