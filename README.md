@@ -183,7 +183,14 @@ Default is `0` and disables the auto-hide behaviour.
 
 ##### `g:lightline#bufferline#min_buffer_count`
 
-Automatically hides the bufferline if there are less than `n` buffers. Default is `0` and disables the auto-hide behaviour.
+Hides the bufferline by default and shows it if there are `n` or more buffers. Default is `0` and the bufferline is always shown.
+If `min_tab_count` is also specified the bufferline will be shown if one of the conditions is met.
+
+##### `g:lightline#bufferline#min_tab_count`
+
+Hides the bufferline by default and shows it if there are `n` or more tabs. Default is `0` and the bufferline is always shown.
+If `min_buffer_count` is also specified the bufferline will be shown if one of the conditions is met.
+This option can be useful if you are also displaying tabs in the lightline tabline.
 
 ##### `g:lightline#bufferline#margin_left`
 

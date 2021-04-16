@@ -7,6 +7,7 @@ scriptencoding utf-8
 let s:dirsep              = fnamemodify(getcwd(),':p')[-1:]
 let s:filename_modifier   = get(g:, 'lightline#bufferline#filename_modifier', ':.')
 let s:min_buffer_count    = get(g:, 'lightline#bufferline#min_buffer_count', 0)
+let s:min_tab_count       = get(g:, 'lightline#bufferline#min_tab_count', 0)
 let s:auto_hide           = get(g:, 'lightline#bufferline#auto_hide', 0)
 let s:margin_left         = get(g:, 'lightline#bufferline#margin_left', 0)
 let s:margin_right        = get(g:, 'lightline#bufferline#margin_right', 0)
@@ -356,8 +357,8 @@ function! s:auto_tabline_timer(...) abort
       set showtabline=2
     endif
     let s:auto_hide_timer = timer_start(s:auto_hide, function('s:hide_timer'))
-  elseif s:min_buffer_count > 0
-    if len(s:filtered_buffers()) >= s:min_buffer_count
+  elseif s:min_buffer_count > 0 || s:min_tab_count > 0
+    if (s:min_tab_count > 0 && tabpagenr('$') >= s:min_tab_count) || (s:min_buffer_count > 0 && len(s:filtered_buffers()) >= s:min_buffer_count)
       if &showtabline != 2 && &lines > 3
         set showtabline=2
       endif
@@ -387,6 +388,9 @@ function! lightline#bufferline#init()
     autocmd!
     if s:auto_hide > 0 || s:min_buffer_count > 0
       autocmd BufEnter,BufLeave,BufDelete  * call <SID>auto_tabline()
+    endif
+    if s:min_tab_count > 0
+      autocmd TabEnter  * call <SID>auto_tabline()
     endif
   augroup END
 endfunction
