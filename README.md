@@ -192,6 +192,12 @@ Hides the bufferline by default and shows it if there are `n` or more tabs. Defa
 If `min_buffer_count` is also specified the bufferline will be shown if one of the conditions is met.
 This option can be useful if you are also displaying tabs in the lightline tabline.
 
+##### `g:lightline#bufferline#filter_by_tabpage`
+
+When more than one tab is opened, only buffers that are open in a window within the current tab are shown. When there
+is only one tab, all buffers are shown. Default is `0`.
+This option can be useful if you are also displaying tabs in the lightline tabline.
+
 ##### `g:lightline#bufferline#margin_left`
 
 The number of spaces to add on the left side of the buffer name. Default is `0`.

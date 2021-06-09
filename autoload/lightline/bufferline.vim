@@ -8,6 +8,7 @@ let s:dirsep              = fnamemodify(getcwd(),':p')[-1:]
 let s:filename_modifier   = get(g:, 'lightline#bufferline#filename_modifier', ':.')
 let s:min_buffer_count    = get(g:, 'lightline#bufferline#min_buffer_count', 0)
 let s:min_tab_count       = get(g:, 'lightline#bufferline#min_tab_count', 0)
+let s:filter_by_tabpage   = get(g:, 'lightline#bufferline#filter_by_tabpage', 0)
 let s:auto_hide           = get(g:, 'lightline#bufferline#auto_hide', 0)
 let s:margin_left         = get(g:, 'lightline#bufferline#margin_left', 0)
 let s:margin_right        = get(g:, 'lightline#bufferline#margin_right', 0)
@@ -142,8 +143,16 @@ function! s:get_from_number_map(i)
   return l:result
 endfunction
 
+function! s:tabpage_filter(i)
+  if s:filter_by_tabpage && tabpagenr('$') > 1
+    return index(tabpagebuflist(tabpagenr()), a:i) != -1
+  endif
+  return 1
+endfunc
+
 function! s:filter_buffer(i)
   return bufexists(a:i) && buflisted(a:i) && !(getbufvar(a:i, '&filetype') ==# 'qf')
+       \ && s:tabpage_filter(a:i)
 endfunction
 
 function! s:filtered_buffers()
