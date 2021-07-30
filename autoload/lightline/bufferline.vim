@@ -208,7 +208,23 @@ function! s:get_buffer_paths(buffers)
 
     if strlen(l:name)
       let l:smart_buffer.path = fnamemodify(l:name, ':p:~:.')
-      let l:smart_buffer.sep = strridx(l:smart_buffer.path, s:dirsep, strlen(l:smart_buffer.path) - 2)
+
+      let sep = strridx(l:smart_buffer.path, s:dirsep)
+      if sep != -1 && l:smart_buffer.path[sep:] ==# s:dirsep
+        let sep = strridx(l:smart_buffer.path, s:dirsep, sep - 1)
+      endif
+
+      " On Windows consider UNIX directory separators as well because
+      " for example neovim converts \ to / upon :mksession
+
+      if sep == -1 && has('win32')
+        let sep = strridx(l:smart_buffer.path, '/')
+        if sep != -1 && l:smart_buffer.path[sep:] ==# '/'
+          let sep = strridx(l:smart_buffer.path, sep - 1)
+        endif
+      endif
+
+      let l:smart_buffer.sep = sep
       let l:smart_buffer.label = l:smart_buffer.path[l:smart_buffer.sep + 1:]
       let l:buffer_count_per_tail[l:smart_buffer.label] = get(l:buffer_count_per_tail, l:smart_buffer.label, 0) + 1
     else
