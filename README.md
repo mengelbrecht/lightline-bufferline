@@ -146,7 +146,7 @@ The name to use for unnamed buffers. Default is `'*'`.
 
 ##### `g:lightline#bufferline#enable_devicons`
 
-Enables the usage of [vim-devicons](https://github.com/ryanoasis/vim-devicons) to display a filetype icon for the buffer.
+Enables the usage of [vim-devicons](https://github.com/ryanoasis/vim-devicons) or [nvim-web-devicons](https://github.com/kyazdani42/nvim-web-devicons) to display a filetype icon for the buffer.
 Default is `0`.
 
 ##### `g:lightline#bufferline#enable_nerdfont`
