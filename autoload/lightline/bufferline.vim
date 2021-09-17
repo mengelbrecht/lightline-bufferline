@@ -210,7 +210,7 @@ function! s:get_buffer_paths(buffers)
       let l:smart_buffer.path = fnamemodify(l:name, ':p:~:.')
 
       let sep = strridx(l:smart_buffer.path, s:dirsep)
-      if sep != -1 && l:smart_buffer.path[sep:] ==# s:dirsep
+      if sep != -1 && l:smart_buffer.path[sep :] ==# s:dirsep
         let sep = strridx(l:smart_buffer.path, s:dirsep, sep - 1)
       endif
 
@@ -219,7 +219,7 @@ function! s:get_buffer_paths(buffers)
 
       if sep == -1 && has('win32')
         let sep = strridx(l:smart_buffer.path, '/')
-        if sep != -1 && l:smart_buffer.path[sep:] ==# '/'
+        if sep != -1 && l:smart_buffer.path[sep :] ==# '/'
           let sep = strridx(l:smart_buffer.path, sep - 1)
         endif
       endif
