@@ -48,6 +48,26 @@ let g:lightline = {
       \ }
 ```
 
+If you are using neovim with a lua configuration the above example looks like this:
+```lua
+vim.g['lightline'] = {
+  colorscheme = 'one',
+  active = {
+    left = {{'mode', 'paste'}, {'readonly', 'filename', 'modified'}}
+  },
+  tabline = {
+    left = {{'buffers'}},
+    right = {{'close'}}
+  },
+  component_expand = {
+    buffers = 'lightline#bufferline#buffers'
+  },
+  component_type = {
+    buffers = 'tabsel'
+  }
+}
+```
+
 If you're adding the buffers to the bottom statusbar, the `modified` indicator will not be updated immediately. To work around this, add this autocmd to your vim config:
 
 ```viml
