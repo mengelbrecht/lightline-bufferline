@@ -49,6 +49,10 @@ else
 endif
 
 function! lightline#bufferline#_click_handler(minwid, clicks, btn, modifiers)
+  let l:pre_command = get(g:, 'lightline#bufferline#click_handler_pre_command', '')
+  if l:pre_command != ''
+    execute l:pre_command
+  endif
   call s:goto_nth_buffer(a:minwid)
 endfunction
 
