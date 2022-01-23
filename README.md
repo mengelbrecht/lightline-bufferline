@@ -244,6 +244,12 @@ If set to `1` the bufferline is clickable under Neovim versions with `tablineat`
 let g:lightline.component_raw = {'buffers': 1}
 ```
 
+You could provide additional command before the click handler is executed. For example, to always open the buffer in the right/main window even when the file explorer window is on focus.
+
+```viml
+let g:click_handler_pre_command = 'wincmd l'
+```
+
 ## Mappings
 
 This plugin provides Plug mappings to switch to buffers using their ordinal number in the bufferline.
