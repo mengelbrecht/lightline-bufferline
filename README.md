@@ -244,6 +244,12 @@ If set to `1` the bufferline is clickable under Neovim versions with `tablineat`
 let g:lightline.component_raw = {'buffers': 1}
 ```
 
+Before the click handler for the buffer is executed a custom event `LightlineBufferlinePreClick` is emitted.
+To perform an operation before the buffer is switched via the click handler you can define an autocommand:
+```viml
+autocmd User LightlineBufferlinePreClick :echom "test"
+```
+
 ## Mappings
 
 This plugin provides Plug mappings to switch to buffers using their ordinal number in the bufferline.
