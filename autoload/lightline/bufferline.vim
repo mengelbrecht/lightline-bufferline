@@ -48,7 +48,15 @@ else
   let s:more_buffers_width = len(s:more_buffers) + 2
 endif
 
+if s:clickable
+  function! s:pre_click_handler()
+  endfunction
+
+  autocmd User LightlineBufferlinePreClick call s:pre_click_handler()
+endif
+
 function! lightline#bufferline#_click_handler(minwid, clicks, btn, modifiers)
+  doautocmd User LightlineBufferlinePreClick
   call s:goto_nth_buffer(a:minwid)
 endfunction
 
