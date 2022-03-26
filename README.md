@@ -218,6 +218,19 @@ When more than one tab is opened, only buffers that are open in a window within 
 is only one tab, all buffers are shown. Default is `0`.
 This option can be useful if you are also displaying tabs in the lightline tabline.
 
+##### `g:lightline#bufferline#buffer_filter`
+
+This can be set to the name of a custom buffer filter function which will be used in addition to the standard buffer filtering.
+The function receives the buffer number as parameter and should return `1` to include the buffer and `0` to hide the buffer in the bufferline.
+For example to hide all neovim terminal buffers use this code in your vim config:
+```viml
+function LightlineBufferlineFilter(buffer)
+  return getbufvar(a:buffer, '&buftype') !=# 'terminal'
+endfunction
+
+let g:lightline#bufferline#buffer_filter = "LightlineBufferlineFilter"
+```
+
 ##### `g:lightline#bufferline#margin_left`
 
 The number of spaces to add on the left side of the buffer name. Default is `0`.
