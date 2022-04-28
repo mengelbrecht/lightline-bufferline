@@ -11,6 +11,7 @@ let s:min_tab_count       = get(g:, 'lightline#bufferline#min_tab_count', 0)
 let s:filter_by_tabpage   = get(g:, 'lightline#bufferline#filter_by_tabpage', 0)
 let s:buffer_filter       = get(g:, 'lightline#bufferline#buffer_filter', 's:buffer_filter_noop')
 let s:auto_hide           = get(g:, 'lightline#bufferline#auto_hide', 0)
+let s:disable_more_buffers_indicator = get(g:, 'lightline#bufferline#disable_more_buffers_indicator', 0)
 let s:margin_left         = get(g:, 'lightline#bufferline#margin_left', 0)
 let s:margin_right        = get(g:, 'lightline#bufferline#margin_right', 0)
 let s:number_map          = get(g:, 'lightline#bufferline#number_map', {})
@@ -308,7 +309,7 @@ function! s:select_buffers(before, current, after)
   let l:width = &columns - l:current_lengths[:0][0]
 
   " Display all buffers if there is enough space to display them
-  if s:sum(l:before_lengths) + s:sum(l:after_lengths) <= l:width
+  if s:disable_more_buffers_indicator || s:sum(l:before_lengths) + s:sum(l:after_lengths) <= l:width
     return [l:before_names, l:current_names, l:after_names]
   endif
 

@@ -89,6 +89,10 @@ The indicator to use for a modified buffer. Default is `' +'`.
 
 The indicator to use when there are buffers that are not shown on the bufferline because they didn't fit the available space. Default is `...`.
 
+##### `g:lightline#bufferline#disable_more_buffers_indicator`
+
+Disables the more buffers indicator so that all buffers are always shown on the bufferline even if they don't fit the available space. Default is `0`.
+
 ##### `g:lightline#bufferline#read_only`
 
 The indicator to use for a read-only buffer. Default is `' -'`.
