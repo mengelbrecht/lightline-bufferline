@@ -89,6 +89,23 @@ The indicator to use for a modified buffer. Default is `' +'`.
 
 The indicator to use when there are buffers that are not shown on the bufferline because they didn't fit the available space. Default is `...`.
 
+##### `g:lightline#bufferline#max_width`
+
+The *more buffers* functionality determines the available space for the bufferline and calculates
+how many buffers can be shown until the *more buffers* indicator is displayed.
+The default function to calculate the available space for the buffers returns the number of columns: `&columns`.
+To customize the available space calculation this option can be set to the name of a custom function which will be used instead.
+
+The function receives no parameters and should return the amount of available space for the bufferline.
+For example if you know that you have exactly 80 columns space for the bufferline you can specify the following function:
+```viml
+function LightlineBufferlineMaxWidth()
+  return 80
+endfunction
+
+let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
+```
+
 ##### `g:lightline#bufferline#disable_more_buffers_indicator`
 
 Disables the more buffers indicator so that all buffers are always shown on the bufferline even if they don't fit the available space. Default is `0`.
