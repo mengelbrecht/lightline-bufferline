@@ -11,6 +11,7 @@ let s:min_tab_count       = get(g:, 'lightline#bufferline#min_tab_count', 0)
 let s:filter_by_tabpage   = get(g:, 'lightline#bufferline#filter_by_tabpage', 0)
 let s:buffer_filter       = get(g:, 'lightline#bufferline#buffer_filter', 's:buffer_filter_noop')
 let s:auto_hide           = get(g:, 'lightline#bufferline#auto_hide', 0)
+let s:max_width_function  = get(g:, 'lightline#bufferline#max_width', 's:max_width')
 let s:disable_more_buffers_indicator = get(g:, 'lightline#bufferline#disable_more_buffers_indicator', 0)
 let s:margin_left         = get(g:, 'lightline#bufferline#margin_left', 0)
 let s:margin_right        = get(g:, 'lightline#bufferline#margin_right', 0)
@@ -301,12 +302,18 @@ function! s:fit_lengths(list, available)
   return [l:remaining, l:count]
 endfunction
 
+function! s:max_width()
+  return &columns
+endfunction
+
+let s:maxWidthFunc = function(s:max_width_function)
+
 function! s:select_buffers(before, current, after)
   let [l:before_names, l:current_names, l:after_names] = [a:before[0], a:current[0], a:after[0]]
   let [l:before_lengths, l:current_lengths, l:after_lengths] = [a:before[1], a:current[1], a:after[1]]
 
   " The current buffer is always displayed
-  let l:width = &columns - l:current_lengths[:0][0]
+  let l:width = call(s:maxWidthFunc, []) - l:current_lengths[:0][0]
 
   " Display all buffers if there is enough space to display them
   if s:disable_more_buffers_indicator || s:sum(l:before_lengths) + s:sum(l:after_lengths) <= l:width
