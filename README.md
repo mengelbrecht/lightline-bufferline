@@ -130,10 +130,13 @@ Valid values are:
 - `0`: No numbers
 - `1`: Buffer number as shown by the `:ls` command
 - `2`: Ordinal number (buffers are numbered from _1_ to _n_ sequentially)
-- `3`: Both buffer number and ordinal number next to each other
-- `4`: Both buffer number and ordinal number next to each other, where the oridinal number is shown before buffer number
+- `3`: Buffer number followed by ordinal number
+- `4`: Ordinal number followed by buffer number
 
-For ordinal number in option `2`, `3` and `4`, number maps `g:lightline#bufferline#number_map` and `g:lightline#bufferline#composed_number_map` are used as described below.
+The separator between ordinal and regular buffer number can be configured using the option `g:lightline#bufferline#ordinal_separator`.
+The separator between the buffer numbers and the buffer name can be configured using the option `g:lightline#bufferline#number_separator`.
+
+For the ordinal number in option `2`, `3` and `4` the number maps `g:lightline#bufferline#number_map` and `g:lightline#bufferline#composed_number_map` are used as described below.
 
 ##### `g:lightline#bufferline#composed_number_map`
 
@@ -149,7 +152,7 @@ let g:lightline#bufferline#composed_number_map = {
 \ 16: '⒃ ', 17: '⒄ ', 18: '⒅ ', 19: '⒆ ', 20: '⒇ '}
 ```
 
-_Note: The option only applies when `g:lightline#bufferline#show_number` is set to `2` or `3`._
+_Note: The option only applies when `g:lightline#bufferline#show_number` is set to `2`, `3` or `4`._
 
 ##### `g:lightline#bufferline#number_map`
 
@@ -171,7 +174,7 @@ let g:lightline#bufferline#number_map = {
 \ 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉'}
 ```
 
-_Note: The option only applies when `g:lightline#bufferline#show_number` is set to `2` or `3`._
+_Note: The option only applies when `g:lightline#bufferline#show_number` is set to `2`, `3` or `4`._
 
 ##### `g:lightline#bufferline#number_separator`
 
