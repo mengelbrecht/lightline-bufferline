@@ -136,16 +136,16 @@ Valid values are:
 The separator between ordinal and regular buffer number can be configured using the option `g:lightline#bufferline#ordinal_separator`.
 The separator between the buffer numbers and the buffer name can be configured using the option `g:lightline#bufferline#number_separator`.
 
-For the ordinal number in option `2`, `3` and `4` the number maps `g:lightline#bufferline#number_map` and `g:lightline#bufferline#composed_number_map` are used as described below.
+For option `2`, `3` and `4` the number maps `g:lightline#bufferline#ordinal_number_map` and `g:lightline#bufferline#composed_ordinal_number_map` are used for ordinal numbers. For regular buffer numbers the number maps `g:lightline#bufferline#buffer_number_map` and `g:lightline#bufferline#composed_buffer_number_map` are used. The number maps are described below.
 
-##### `g:lightline#bufferline#composed_number_map`
+##### `g:lightline#bufferline#composed_ordinal_number_map`
 
 Dictionary mapping ordinal numbers to their alternative character representations. Default is `{}`.
 
-For example, to use parenthized unicode numbers taken from [Enclosed Alphanumerics Unicode block](https://unicode.org/charts/nameslist/c_2460.html):
+For example, to use parenthesized unicode numbers taken from [Enclosed Alphanumerics Unicode block](https://unicode.org/charts/nameslist/c_2460.html):
 
 ```viml
-let g:lightline#bufferline#composed_number_map = {
+let g:lightline#bufferline#composed_ordinal_number_map = {
 \ 1:  '⑴ ', 2:  '⑵ ', 3:  '⑶ ', 4:  '⑷ ', 5:  '⑸ ',
 \ 6:  '⑹ ', 7:  '⑺ ', 8:  '⑻ ', 9:  '⑼ ', 10: '⑽ ',
 \ 11: '⑾ ', 12: '⑿ ', 13: '⒀ ', 14: '⒁ ', 15: '⒂ ',
@@ -154,14 +154,14 @@ let g:lightline#bufferline#composed_number_map = {
 
 _Note: The option only applies when `g:lightline#bufferline#show_number` is set to `2`, `3` or `4`._
 
-##### `g:lightline#bufferline#number_map`
+##### `g:lightline#bufferline#ordinal_number_map`
 
-Fallback dictionary mapping digits (0-9) which are used in ordinal number composing if the number is not mapped in `g:lightline#bufferline#composed_number_map`. Default is `{}`.
+Fallback dictionary mapping digits (0-9) which are used in ordinal number composing if the number is not mapped in `g:lightline#bufferline#composed_ordinal_number_map`. Default is `{}`.
 
 For example, to use unicode superscript numerals:
 
 ```viml
-let g:lightline#bufferline#number_map = {
+let g:lightline#bufferline#ordinal_number_map = {
 \ 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴',
 \ 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹'}
 ```
@@ -169,10 +169,26 @@ let g:lightline#bufferline#number_map = {
 ... or unicode subscript numerals:
 
 ```viml
-let g:lightline#bufferline#number_map = {
+let g:lightline#bufferline#ordinal_number_map = {
 \ 0: '₀', 1: '₁', 2: '₂', 3: '₃', 4: '₄',
 \ 5: '₅', 6: '₆', 7: '₇', 8: '₈', 9: '₉'}
 ```
+
+_Note: The option only applies when `g:lightline#bufferline#show_number` is set to `2`, `3` or `4`._
+
+##### `g:lightline#bufferline#composed_buffer_number_map`
+
+Dictionary mapping regular buffer numbers to their alternative character representations. Default is `{}`.
+
+See `g:lightline#bufferline#composed_ordinal_number_map` for example values.
+
+_Note: The option only applies when `g:lightline#bufferline#show_number` is set to `2`, `3` or `4`._
+
+##### `g:lightline#bufferline#buffer_number_map`
+
+Fallback dictionary mapping digits (0-9) which are used in regular buffer number composing if the number is not mapped in `g:lightline#bufferline#composed_buffer_number_map`. Default is `{}`.
+
+See `g:lightline#bufferline#ordinal_number_map` for example values.
 
 _Note: The option only applies when `g:lightline#bufferline#show_number` is set to `2`, `3` or `4`._
 
@@ -182,7 +198,7 @@ Defines the string which is used to separate the buffer number (if enabled) and 
 
 ##### `g:lightline#bufferline#ordinal_separator`
 
-Defines the string which is used to separate the buffer number and the oridinal number. Default is `''`.
+Defines the string which is used to separate the buffer number and the ordinal number. Default is `''`.
 
 ##### `g:lightline#bufferline#unnamed`
 
