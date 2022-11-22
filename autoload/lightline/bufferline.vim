@@ -465,6 +465,33 @@ function! lightline#bufferline#go(n)
   call s:goto_nth_buffer(a:n - 1)
 endfunction
 
+function lightline#bufferline#go_relative(offset)
+  let l:buffers = s:filtered_buffers()
+  let l:current_index = index(l:buffers, bufnr('%'))
+  if l:current_index == -1
+      return
+  endif
+
+  let l:count = len(l:buffers)
+  let l:new_index = l:current_index + a:offset
+
+  if l:new_index < 0
+    let l:new_index = l:count - 1
+  elseif l:new_index >= l:count
+    let l:new_index = 0
+  endif
+
+  execute 'b' .. l:buffers[l:new_index]
+endfunction
+
+function! lightline#bufferline#go_next()
+  call lightline#bufferline#go_relative(1)
+endfunction
+
+function! lightline#bufferline#go_previous()
+  call lightline#bufferline#go_relative(-1)
+endfunction
+
 function! lightline#bufferline#delete(n)
   call s:delete_nth_buffer(a:n - 1)
 endfunction
@@ -487,6 +514,9 @@ noremap <silent> <Plug>lightline#bufferline#go(7)  :call lightline#bufferline#go
 noremap <silent> <Plug>lightline#bufferline#go(8)  :call lightline#bufferline#go(8)<CR>
 noremap <silent> <Plug>lightline#bufferline#go(9)  :call lightline#bufferline#go(9)<CR>
 noremap <silent> <Plug>lightline#bufferline#go(10) :call lightline#bufferline#go(10)<CR>
+
+noremap <silent> <Plug>lightline#bufferline#go_next()     :call lightline#bufferline#go_next()<CR>
+noremap <silent> <Plug>lightline#bufferline#go_previous() :call lightline#bufferline#go_previous()<CR>
 
 noremap <silent> <Plug>lightline#bufferline#delete(1)  :call lightline#bufferline#delete(1)<CR>
 noremap <silent> <Plug>lightline#bufferline#delete(2)  :call lightline#bufferline#delete(2)<CR>

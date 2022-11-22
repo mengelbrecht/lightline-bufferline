@@ -308,7 +308,7 @@ autocmd User LightlineBufferlinePreClick :echom "test"
 This plugin provides Plug mappings to switch to buffers using their ordinal number in the bufferline.
 To display the ordinal numbers in the bufferline use the setting `g:lightline#bufferline#show_number = 2`.
 
-To use the Plug mappings you can use e.g. these mappings:
+To use the Plug mappings to navigate to buffers you can use e.g. these mappings:
 
 ```viml
 nmap <Leader>1 <Plug>lightline#bufferline#go(1)
@@ -321,6 +321,9 @@ nmap <Leader>7 <Plug>lightline#bufferline#go(7)
 nmap <Leader>8 <Plug>lightline#bufferline#go(8)
 nmap <Leader>9 <Plug>lightline#bufferline#go(9)
 nmap <Leader>0 <Plug>lightline#bufferline#go(10)
+
+nmap <Tab>   <Plug>lightline#bufferline#go_next()
+nmap <S-Tab> <Plug>lightline#bufferline#go_previous()
 ```
 
 Additionally you can use the following e.g. to delete buffers by their ordinal number.
@@ -358,6 +361,19 @@ To switch to the first buffer using a mapping you can use the function like this
 ```viml
 nmap <Leader>1 :call lightline#bufferline#go(1)<CR>
 ```
+
+#### `lightline#bufferline#go_relative(offset)`
+
+This function switches to the buffer `offset` positions relative to the current buffer.
+Passing a value of `1` for `offset` would switch to the next buffer, while a value of `-1` would switch to the previous buffer.
+
+#### `lightline#bufferline#go_next()`
+
+This function switches to the next buffer in the bufferline.
+
+#### `lightline#bufferline#go_previous()`
+
+This function switches to the previous buffer in the bufferline.
 
 #### `lightline#bufferline#delete(n)`
 
