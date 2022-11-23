@@ -9,6 +9,14 @@ This plugin provides bufferline functionality for the [lightline](https://github
 - [Installation](#installation)
 - [Integration](#integration)
 - [Configuration](#configuration)
+  - [General](#general)
+  - [Filename](#filename)
+  - [Indicators](#indicators)
+  - [More Buffers](#more-buffers)
+  - [Numbering](#numbering)
+  - [Icons](#icons)
+  - [Hiding](#hiding)
+  - [Filtering](#filtering)
 - [Mappings](#mappings)
 - [Example](#example)
 - [License](#license)
@@ -76,18 +84,86 @@ autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
 ## Configuration
 
+### General
+
+##### `g:lightline#bufferline#unnamed`
+
+The name to use for unnamed buffers. Default is `'*'`.
+
+##### `g:lightline#bufferline#margin_left`
+
+The number of spaces to add on the left side of the buffer name. Default is `0`.
+
+##### `g:lightline#bufferline#margin_right`
+
+The number of spaces to add on the right side of the buffer name. Default is `0`.
+
+##### `g:lightline#bufferline#reverse_buffers`
+
+If enabled the buffers will be displayed in a reversed order.
+Default is `0` (buffers are not reversed).
+
+##### `g:lightline#bufferline#right_aligned`
+
+If the bufferline is used in the `right` component of the tabline this should be set to `1` to ensure the correct order of the buffers.
+Default is `0`.
+
+##### `g:lightline#bufferline#clickable`
+
+If set to `1` the bufferline is clickable when using Neovim versions with `tablineat` feature. To enable this feature, you must also set the bufferline component to be raw in your `vimrc`:
+
+```viml
+let g:lightline.component_raw = {'buffers': 1}
+```
+
+Before the click handler for the buffer is executed a custom event `LightlineBufferlinePreClick` is emitted.
+To perform an operation before the buffer is switched via the click handler you can define an autocommand:
+```viml
+autocmd User LightlineBufferlinePreClick :echom "test"
+```
+
+### Filename
+
 ##### `g:lightline#bufferline#filename_modifier`
 
 The filename-modifier applied to each buffer name. Default is `':.'`.
 To see the available options use the command `:help filename-modifiers` in vim.
 
+##### `g:lightline#bufferline#shorten_path`
+
+Defines whether to shorten the path using the `pathshorten` function. Default is `1`.
+
+##### `g:lightline#bufferline#smart_path`
+
+If enabled, when two files have the same name the distinguishing sections of each file's path are added. Default is `1`.
+
+### Indicators
+
 ##### `g:lightline#bufferline#modified`
 
 The indicator to use for a modified buffer. Default is `' +'`.
 
+##### `g:lightline#bufferline#read_only`
+
+The indicator to use for a read-only buffer. Default is `' -'`.
+
 ##### `g:lightline#bufferline#more_buffers`
 
 The indicator to use when there are buffers that are not shown on the bufferline because they didn't fit the available space. Default is `...`.
+
+##### `g:lightline#bufferline#unicode_symbols`
+
+Use unicode symbols for modified and read-only buffers as well as the more buffers indicator. Default is `0`.
+
+If set to `1` the symbols `+`, `-` and `...` are replaced by `✎`, `` and `…`.
+
+_Note: The symbols are only correctly displayed if your font supports these characters._
+
+### More Buffers
+
+##### `g:lightline#bufferline#disable_more_buffers_indicator`
+
+Disables the more buffers indicator so that all buffers are always shown on the bufferline even if they don't fit the available space. Default is `0`.
 
 ##### `g:lightline#bufferline#max_width`
 
@@ -106,21 +182,7 @@ endfunction
 let g:lightline#bufferline#max_width = "LightlineBufferlineMaxWidth"
 ```
 
-##### `g:lightline#bufferline#disable_more_buffers_indicator`
-
-Disables the more buffers indicator so that all buffers are always shown on the bufferline even if they don't fit the available space. Default is `0`.
-
-##### `g:lightline#bufferline#read_only`
-
-The indicator to use for a read-only buffer. Default is `' -'`.
-
-##### `g:lightline#bufferline#shorten_path`
-
-Defines whether to shorten the path using the `pathshorten` function. Default is `1`.
-
-##### `g:lightline#bufferline#smart_path`
-
-If enabled, when two files have the same name the distinguishing sections of each file's path are added. Default is `1`.
+### Numbering
 
 ##### `g:lightline#bufferline#show_number`
 
@@ -200,9 +262,7 @@ Defines the string which is used to separate the buffer number (if enabled) and 
 
 Defines the string which is used to separate the buffer number and the ordinal number. Default is `''`.
 
-##### `g:lightline#bufferline#unnamed`
-
-The name to use for unnamed buffers. Default is `'*'`.
+### Icons
 
 ##### `g:lightline#bufferline#enable_devicons`
 
@@ -223,13 +283,7 @@ Valid values are:
 - `right`: Right of the buffer name
 - `first`: Left of the buffer name and number
 
-##### `g:lightline#bufferline#unicode_symbols`
-
-Use unicode symbols for modified and read-only buffers as well as the more buffers indicator. Default is `0`.
-
-If set to `1` the symbols `+`, `-` and `...` are replaced by `✎`, `` and `…`.
-
-_Note: The symbols are only correctly displayed if your font supports these characters._
+### Hiding
 
 ##### `g:lightline#bufferline#auto_hide`
 
@@ -252,6 +306,8 @@ Hides the bufferline by default and shows it if there are `n` or more tabs. Defa
 If `min_buffer_count` is also specified the bufferline will be shown if one of the conditions is met.
 This option can be useful if you are also displaying tabs in the lightline tabline.
 
+### Filtering
+
 ##### `g:lightline#bufferline#filter_by_tabpage`
 
 When more than one tab is opened, only buffers that are open in a window within the current tab are shown. When there
@@ -269,38 +325,6 @@ function LightlineBufferlineFilter(buffer)
 endfunction
 
 let g:lightline#bufferline#buffer_filter = "LightlineBufferlineFilter"
-```
-
-##### `g:lightline#bufferline#margin_left`
-
-The number of spaces to add on the left side of the buffer name. Default is `0`.
-
-##### `g:lightline#bufferline#margin_right`
-
-The number of spaces to add on the right side of the buffer name. Default is `0`.
-
-##### `g:lightline#bufferline#reverse_buffers`
-
-If enabled the buffers will be displayed in a reversed order.
-Default is `0` (buffers are not reversed).
-
-##### `g:lightline#bufferline#right_aligned`
-
-If the bufferline is used in the `right` component of the tabline this should be set to `1` to ensure the correct order of the buffers.
-Default is `0`.
-
-##### `g:lightline#bufferline#clickable`
-
-If set to `1` the bufferline is clickable under Neovim versions with `tablineat` feature. To enable this feature, you must also set the bufferline component to be raw in your `vimrc`:
-
-```viml
-let g:lightline.component_raw = {'buffers': 1}
-```
-
-Before the click handler for the buffer is executed a custom event `LightlineBufferlinePreClick` is emitted.
-To perform an operation before the buffer is switched via the click handler you can define an autocommand:
-```viml
-autocmd User LightlineBufferlinePreClick :echom "test"
 ```
 
 ## Mappings
