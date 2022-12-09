@@ -167,19 +167,46 @@ function! s:buffer_filter_noop(buffer)
   return 1
 endfunction
 
-let s:bufferFilterFunc = function(s:buffer_filter)
+" Convert old-style boolean to new style category strings
+function! s:buffer_filter_category(buffer)
+  let l:value = function(s:buffer_filter)(a:buffer)
+  if type(l:value) == v:t_number
+    return l:value ? 'default' : ''
+  endif
+  return l:value
+endfunction
 
-function! s:filter_buffer(i)
+function! s:filter_buffer(i, category)
   return bufexists(a:i) && buflisted(a:i) && getbufvar(a:i, '&filetype') !=# 'qf'
-       \ && s:tabpage_filter(a:i) && call(s:bufferFilterFunc, [a:i])
+       \ && s:tabpage_filter(a:i) && s:buffer_filter_category(a:i) == a:category
 endfunction
 
 function! s:filtered_buffers()
-  let l:buffers = filter(range(1, bufnr('$')), 's:filter_buffer(v:val)')
+  let l:category = s:buffer_filter_category(bufnr('%'))
+  " Preserve current behavior, so that bufferline does not disappear if current hidden
+  if len(l:category) == 0
+    let l:category = 'default'
+  endif
+  let l:buffers = filter(range(1, bufnr('$')), 's:filter_buffer(v:val, l:category)')
   if s:reverse_buffers == 1
     let l:buffers = reverse(l:buffers)
   endif
   return l:buffers
+endfunction
+
+function! s:get_all_categories()
+  let l:categories = map(range(1, bufnr('$')), 's:filter_buffer(v:val)')
+  let l:unique = {}
+  for l:value in l:categories
+    if len(l:value)
+      let l:unique[l:value] = 1
+    endif
+  endfor
+  return keys(l:unique)
+endfunction
+
+function! lightline#bufferline#get_all_categories()
+  return s:get_all_categories()
 endfunction
 
 function! s:get_buffer_for_ordinal_number(n)
