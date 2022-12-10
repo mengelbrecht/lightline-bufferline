@@ -327,6 +327,17 @@ endfunction
 let g:lightline#bufferline#buffer_filter = "LightlineBufferlineFilter"
 ```
 
+Instead of just `1` or `0`, you can also return a string with a custom category name.
+The bufferline will only display the buffers with the same category as the active one.
+If the active buffer is hidden (empty string `''` or `0`) it will instead display category `'default'` (equivalent to `1`).
+This may be useful if you want to display different categories of buffers in different splits, and be able to jump between buffers without mixing categories.
+For example, if you want to keep all your terminals in a separate split, you can modify the function above:
+```viml
+function LightlineBufferlineFilter(buffer)
+  return getbufvar(a:buffer, '&buftype') ==# 'terminal' ? 'terminal' : 1
+endfunction
+```
+
 ## Mappings
 
 This plugin provides Plug mappings to switch to buffers using their ordinal number in the bufferline.
@@ -348,6 +359,8 @@ nmap <Leader>0 <Plug>lightline#bufferline#go(10)
 
 nmap <Tab>   <Plug>lightline#bufferline#go_next()
 nmap <S-Tab> <Plug>lightline#bufferline#go_previous()
+nmap <Leader><Tab>   <Plug>lightline#bufferline#go_next_category()
+nmap <Leader><S-Tab> <Plug>lightline#bufferline#go_previous_category()
 ```
 
 Additionally you can use the following e.g. to delete buffers by their ordinal number.
@@ -399,6 +412,14 @@ This function switches to the next buffer in the bufferline.
 
 This function switches to the previous buffer in the bufferline.
 
+#### `lightline#bufferline#go_next_category()`
+
+This function switches to the first buffer in the next category.
+
+#### `lightline#bufferline#go_previous_category()`
+
+This function switches to the first buffer in the previous category.
+
 #### `lightline#bufferline#delete(n)`
 
 This function deletes the buffer with the ordinal number specified by parameter `n`.
@@ -434,6 +455,12 @@ This will disable the GUI tabline and enable the lightline tabline.
 
 **Q:** How can I hide the path and show only the filename?<br/>
 **A:** Add `let g:lightline#bufferline#filename_modifier = ':t'` to your configuration.
+
+**Q:** My buffer filter behaves oddly when trying to use filetype!<br/>
+**A:** `getbufvar(a:buffer, '&filetype')` return an empty string before buffer is loaded, e.g. when opening multiple files. You can use file extension `fnamemodify(bufname(a:buffer), ':e')` as a fallback.
+
+**Q:** How to dynamically change how a single buffer is filtered?<br/>
+**A:** You can declare a buffer local variable (e.g. `let b:buffer_filter_override = 0`) and check if it exists at the entry of your filter function.
 
 ## License
 
