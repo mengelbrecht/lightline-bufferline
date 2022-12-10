@@ -167,8 +167,7 @@ function! s:buffer_filter_noop(buffer)
   return 1
 endfunction
 
-" Convert old-style boolean to new style category strings
-function! s:buffer_filter_category(buffer)
+function! s:buffer_category(buffer)
   let l:value = function(s:buffer_filter)(a:buffer)
   if type(l:value) == v:t_number
     return l:value ? 'default' : ''
@@ -176,18 +175,19 @@ function! s:buffer_filter_category(buffer)
   return l:value
 endfunction
 
-function! s:filter_buffer(i, category)
+function! s:filter_buffer(i)
   return bufexists(a:i) && buflisted(a:i) && getbufvar(a:i, '&filetype') !=# 'qf'
-       \ && s:tabpage_filter(a:i) && s:buffer_filter_category(a:i) == a:category
+       \ && s:tabpage_filter(a:i) && s:buffer_category(a:i) != ''
 endfunction
 
 function! s:filtered_buffers()
-  let l:category = s:buffer_filter_category(bufnr('%'))
-  " Preserve current behavior, so that bufferline does not disappear if current hidden
-  if len(l:category) == 0
-    let l:category = 'default'
-  endif
-  let l:buffers = filter(range(1, bufnr('$')), 's:filter_buffer(v:val, l:category)')
+  let l:category = s:buffer_category(bufnr('%'))
+  return s:filtered_buffers_with_category(l:category != '' ? l:category : 'default')
+endfunction
+
+function! s:filtered_buffers_with_category(category)
+  let l:filter_expr = 's:filter_buffer(v:val) && s:buffer_category(v:val) == a:category'
+  let l:buffers = filter(range(1, bufnr('$')), l:filter_expr)
   if s:reverse_buffers == 1
     let l:buffers = reverse(l:buffers)
   endif
@@ -195,18 +195,13 @@ function! s:filtered_buffers()
 endfunction
 
 function! s:get_all_categories()
-  let l:categories = map(range(1, bufnr('$')), 's:filter_buffer(v:val)')
   let l:unique = {}
-  for l:value in l:categories
-    if len(l:value)
-      let l:unique[l:value] = 1
+  for l:val in range(1, bufnr('$'))
+    if s:filter_buffer(l:val)
+      let l:unique[s:buffer_category(l:val)] = 1
     endif
   endfor
-  return keys(l:unique)
-endfunction
-
-function! lightline#bufferline#get_all_categories()
-  return s:get_all_categories()
+  return sort(keys(l:unique))
 endfunction
 
 function! s:get_buffer_for_ordinal_number(n)
@@ -492,6 +487,16 @@ function! lightline#bufferline#go(n)
   call s:goto_nth_buffer(a:n - 1)
 endfunction
 
+function! s:offset_clamp(val, offset, count)
+  let l:val = a:val + a:offset
+  if l:val < 0
+    let l:val = a:count - 1
+  elseif l:val >= a:count
+    let l:val = 0
+  endif
+  return l:val
+endfunction
+
 function lightline#bufferline#go_relative(offset)
   let l:buffers = s:filtered_buffers()
   let l:current_index = index(l:buffers, bufnr('%'))
@@ -499,15 +504,7 @@ function lightline#bufferline#go_relative(offset)
       return
   endif
 
-  let l:count = len(l:buffers)
-  let l:new_index = l:current_index + a:offset
-
-  if l:new_index < 0
-    let l:new_index = l:count - 1
-  elseif l:new_index >= l:count
-    let l:new_index = 0
-  endif
-
+  let l:new_index = s:offset_clamp(l:current_index, a:offset, len(l:buffers))
   execute 'b' .. l:buffers[l:new_index]
 endfunction
 
@@ -517,6 +514,32 @@ endfunction
 
 function! lightline#bufferline#go_previous()
   call lightline#bufferline#go_relative(-1)
+endfunction
+
+function! lightline#bufferline#go_relative_category(offset)
+  let l:categories = s:get_all_categories()
+  if len(l:categories) < 2
+    return
+  endif
+
+  let l:current_category = s:buffer_category(bufnr('%'))
+  let l:current_index = index(l:categories, l:current_category)
+  if l:current_index < 0
+    return
+  endif
+
+  let l:new_index = s:offset_clamp(l:current_index, a:offset, len(l:categories))
+  let l:new_category = l:categories[l:new_index]
+  let l:buffer = s:filtered_buffers_with_category(l:new_category)[0]
+  execute 'b' .. l:buffer
+endfunction
+
+function! lightline#bufferline#go_next_category()
+  call lightline#bufferline#go_relative_category(1)
+endfunction
+
+function! lightline#bufferline#go_previous_category()
+  call lightline#bufferline#go_relative_category(-1)
 endfunction
 
 function! lightline#bufferline#delete(n)
@@ -544,6 +567,8 @@ noremap <silent> <Plug>lightline#bufferline#go(10) :call lightline#bufferline#go
 
 noremap <silent> <Plug>lightline#bufferline#go_next()     :call lightline#bufferline#go_next()<CR>
 noremap <silent> <Plug>lightline#bufferline#go_previous() :call lightline#bufferline#go_previous()<CR>
+noremap <silent> <Plug>lightline#bufferline#go_next_category()     :call lightline#bufferline#go_next_category()<CR>
+noremap <silent> <Plug>lightline#bufferline#go_previous_category() :call lightline#bufferline#go_previous_category()<CR>
 
 noremap <silent> <Plug>lightline#bufferline#delete(1)  :call lightline#bufferline#delete(1)<CR>
 noremap <silent> <Plug>lightline#bufferline#delete(2)  :call lightline#bufferline#delete(2)<CR>
