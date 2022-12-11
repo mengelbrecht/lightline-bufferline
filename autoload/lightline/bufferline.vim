@@ -180,6 +180,29 @@ function! s:filter_buffer(i)
        \ && s:tabpage_filter(a:i) && s:buffer_category(a:i) != ''
 endfunction
 
+" Order map, each defaults to buffer_id. Orders are never set, only swapped.
+" Since Vim never reused buffer numbers, this forms a symmetric group,
+" i.e. invariant sorted(keys(buffer_order)) == sorted(values(buffer_order)).
+" This also automagically handles opening new buffers and deleting old ones,
+" moving between categories and even moving buffers between them.
+let s:buffer_order = {}
+function! s:get_buffer_order(buffer)
+  if !has_key(s:buffer_order, a:buffer)
+    let s:buffer_order[a:buffer] = a:buffer
+  endif
+  return s:buffer_order[a:buffer]
+endfunction
+
+  " lightline#update() does not always work
+function! s:force_update()
+  call lightline#toggle()
+  call lightline#toggle()
+endfunction
+
+function! s:buffer_order_comparator(first, second)
+  return s:get_buffer_order(a:first) - s:get_buffer_order(a:second)
+endfunction
+
 function! s:filtered_buffers(...)
   let l:category = get(a:, 1, s:buffer_category(bufnr('%')))
   if l:category == ''
@@ -188,8 +211,9 @@ function! s:filtered_buffers(...)
   let l:filter_expr = 's:filter_buffer(v:val) && s:buffer_category(v:val) == l:category'
   let l:buffers = filter(range(1, bufnr('$')), l:filter_expr)
   if s:reverse_buffers == 1
-    let l:buffers = reverse(l:buffers)
+    call reverse(l:buffers)
   endif
+  call sort(l:buffers, 's:buffer_order_comparator')
   return l:buffers
 endfunction
 
@@ -495,7 +519,7 @@ function! s:clamp(val, count)
   return a:val
 endfunction
 
-function lightline#bufferline#go_relative(offset)
+function lightline#bufferline#get_relative(offset)
   let l:buffers = s:filtered_buffers()
   let l:current_index = index(l:buffers, bufnr('%'))
   if l:current_index == -1
@@ -503,7 +527,11 @@ function lightline#bufferline#go_relative(offset)
   endif
 
   let l:new_index = s:clamp(l:current_index + a:offset, len(l:buffers))
-  execute 'b' .. l:buffers[l:new_index]
+  return l:buffers[l:new_index]
+endfunction
+
+function lightline#bufferline#go_relative(offset)
+  execute 'b' .. lightline#bufferline#get_relative(a:offset)
 endfunction
 
 function! lightline#bufferline#go_next()
@@ -552,6 +580,71 @@ function! lightline#bufferline#get_buffer_for_ordinal_number(n)
   return s:get_buffer_for_ordinal_number(a:n - 1)
 endfunction
 
+function! lightline#bufferline#reset_order()
+  let s:buffer_order = {}
+  call s:force_update()
+endfunction
+
+" Avoid repeated calls to s:filtered_buffers() in callers
+function! s:move_to(target, buffers) abort
+  let l:target = a:target - 1
+  let l:buffers = s:filtered_buffers()
+  if l:target < 0 || target >= len(l:buffers)
+    return
+  endif
+
+  let l:current = index(l:buffers, bufnr('%'))
+  let l:direction = l:current > l:target ? 1 : -1
+
+  " Cannot just swap current and target, need to offset everything on the way.
+  " From target to current exclusive, keep stealing order from next,
+  " then give the target's order to current at the end.
+  "
+  " E.g.: for buffers ABC, current = C, target = A
+  " onew = o[A]   A: 1, B: 2, C: 3
+  " o[A] = o[B]   A: 2, B: 2: C: 3
+  " o[B] = o[C]   A: 2, B: 3, C: 3
+  " o[C] = onew   A: 2, B: 3, C: 1
+  " Sorted by order, gives CAB, so A moved to C like we wanted.
+  let l:new_order = s:buffer_order[l:buffers[l:target]]
+  for l:pivot in range(l:target, l:current - l:direction, l:direction)
+    let s:buffer_order[l:buffers[l:pivot]] =
+      \ s:buffer_order[l:buffers[l:pivot + l:direction]]
+  endfor
+
+  let s:buffer_order[l:buffers[l:current]] = l:new_order
+  call s:force_update()
+endfunction
+
+function! lightline#bufferline#move_to(target) abort
+  return s:move_to(a:target, s:filtered_buffers())
+endfunction
+
+function! lightline#bufferline#move_by(offset) abort
+  let l:buffers = s:filtered_buffers()
+  let l:current = index(l:buffers, bufnr('%'))
+  let l:target = s:clamp(l:current + a:offset, len(l:buffers))
+  return s:move_to(l:target + 1, s:filtered_buffers())
+endfunction
+
+function! lightline#bufferline#move_next() abort
+  return lightline#bufferline#move_by(1)
+endfunction
+
+function! lightline#bufferline#move_previous() abort
+  return lightline#bufferline#move_by(-1)
+endfunction
+
+function! lightline#bufferline#move_first() abort
+  return lightline#bufferline#move_to(1)
+endfunction
+
+function! lightline#bufferline#move_last() abort
+  let l:buffers = s:filtered_buffers()
+  return s:move_to(len(l:buffers), s:filtered_buffers())
+endfunction
+
+
 noremap <silent> <Plug>lightline#bufferline#go(1)  :call lightline#bufferline#go(1)<CR>
 noremap <silent> <Plug>lightline#bufferline#go(2)  :call lightline#bufferline#go(2)<CR>
 noremap <silent> <Plug>lightline#bufferline#go(3)  :call lightline#bufferline#go(3)<CR>
@@ -567,6 +660,12 @@ noremap <silent> <Plug>lightline#bufferline#go_next()     :call lightline#buffer
 noremap <silent> <Plug>lightline#bufferline#go_previous() :call lightline#bufferline#go_previous()<CR>
 noremap <silent> <Plug>lightline#bufferline#go_next_category()     :call lightline#bufferline#go_next_category()<CR>
 noremap <silent> <Plug>lightline#bufferline#go_previous_category() :call lightline#bufferline#go_previous_category()<CR>
+
+noremap <silent> <Plug>lightline#bufferline#move_next()     :call lightline#bufferline#move_next()<CR>
+noremap <silent> <Plug>lightline#bufferline#move_previous() :call lightline#bufferline#move_previous()<CR>
+noremap <silent> <Plug>lightline#bufferline#move_first()     :call lightline#bufferline#move_first()<CR>
+noremap <silent> <Plug>lightline#bufferline#move_last() :call lightline#bufferline#move_last()<CR>
+noremap <silent> <Plug>lightline#bufferline#reset_order() :call lightline#bufferline#reset_order()<CR>
 
 noremap <silent> <Plug>lightline#bufferline#delete(1)  :call lightline#bufferline#delete(1)<CR>
 noremap <silent> <Plug>lightline#bufferline#delete(2)  :call lightline#bufferline#delete(2)<CR>
