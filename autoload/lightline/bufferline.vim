@@ -180,13 +180,12 @@ function! s:filter_buffer(i)
        \ && s:tabpage_filter(a:i) && s:buffer_category(a:i) != ''
 endfunction
 
-function! s:filtered_buffers()
-  let l:category = s:buffer_category(bufnr('%'))
-  return s:filtered_buffers_with_category(l:category != '' ? l:category : 'default')
-endfunction
-
-function! s:filtered_buffers_with_category(category)
-  let l:filter_expr = 's:filter_buffer(v:val) && s:buffer_category(v:val) == a:category'
+function! s:filtered_buffers(...)
+  let l:category = get(a:, 1, s:buffer_category(bufnr('%')))
+  if l:category == ''
+    let l:category = 'default'
+  endif
+  let l:filter_expr = 's:filter_buffer(v:val) && s:buffer_category(v:val) == l:category'
   let l:buffers = filter(range(1, bufnr('$')), l:filter_expr)
   if s:reverse_buffers == 1
     let l:buffers = reverse(l:buffers)
@@ -487,14 +486,13 @@ function! lightline#bufferline#go(n)
   call s:goto_nth_buffer(a:n - 1)
 endfunction
 
-function! s:offset_clamp(val, offset, count)
-  let l:val = a:val + a:offset
-  if l:val < 0
-    let l:val = a:count - 1
-  elseif l:val >= a:count
-    let l:val = 0
+function! s:clamp(val, count)
+  if a:val < 0
+    return a:count - 1
+  elseif a:val >= a:count
+    return 0
   endif
-  return l:val
+  return a:val
 endfunction
 
 function lightline#bufferline#go_relative(offset)
@@ -504,7 +502,7 @@ function lightline#bufferline#go_relative(offset)
       return
   endif
 
-  let l:new_index = s:offset_clamp(l:current_index, a:offset, len(l:buffers))
+  let l:new_index = s:clamp(l:current_index + a:offset, len(l:buffers))
   execute 'b' .. l:buffers[l:new_index]
 endfunction
 
@@ -528,9 +526,9 @@ function! lightline#bufferline#go_relative_category(offset)
     return
   endif
 
-  let l:new_index = s:offset_clamp(l:current_index, a:offset, len(l:categories))
+  let l:new_index = s:clamp(l:current_index + a:offset, len(l:categories))
   let l:new_category = l:categories[l:new_index]
-  let l:buffer = s:filtered_buffers_with_category(l:new_category)[0]
+  let l:buffer = s:filtered_buffers(l:new_category)[0]
   execute 'b' .. l:buffer
 endfunction
 
