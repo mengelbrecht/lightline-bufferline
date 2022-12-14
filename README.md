@@ -430,11 +430,11 @@ This function switches to the first buffer in the next category.
 
 This function switches to the first buffer in the previous category.
 
-#### `lightline#bufferline#move_to(target)`
+#### `lightline#bufferline#move(target)`
 
 This function moves current buffer to given ordinal position.
 
-#### `lightline#bufferline#move_by(offset)`
+#### `lightline#bufferline#move_relative(offset)`
 
 This function moves current buffer by given number of positions.
 Passing a value of `1` for `offset` would move current buffer one position to right,

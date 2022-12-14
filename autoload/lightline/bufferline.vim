@@ -186,14 +186,14 @@ endfunction
 " This also automagically handles opening new buffers and deleting old ones,
 " switching between categories and even moving buffers between them.
 let s:order = {}
-function! s:get_order(buffer)
+function! s:get_order(buffer) abort
   if !has_key(s:order, a:buffer)
     let s:order[a:buffer] = a:buffer
   endif
   return s:order[a:buffer]
 endfunction
 
-function! s:order_comparator(first, second)
+function! s:order_comparator(first, second) abort
   return s:get_order(a:first) - s:get_order(a:second)
 endfunction
 
@@ -573,18 +573,18 @@ function! lightline#bufferline#get_buffer_for_ordinal_number(n)
 endfunction
 
   " lightline#update() does not always work
-function! s:force_update()
+function! s:force_update() abort
   call lightline#toggle()
   call lightline#toggle()
 endfunction
 
-function! lightline#bufferline#reset_order()
+function! lightline#bufferline#reset_order() abort
   let s:order = {}
   call s:force_update()
 endfunction
 
 " Avoid repeated calls to s:filtered_buffers() in callers
-function! s:move_to(target, buffers) abort
+function! s:move(target, buffers) abort
   let l:target = a:target - 1
   let l:buffers = s:filtered_buffers()
   if l:target < 0 || target >= len(l:buffers)
@@ -617,32 +617,32 @@ function! s:move_to(target, buffers) abort
   call s:force_update()
 endfunction
 
-function! lightline#bufferline#move_to(target) abort
-  return s:move_to(a:target, s:filtered_buffers())
+function! lightline#bufferline#move(target) abort
+  return s:move(a:target, s:filtered_buffers())
 endfunction
 
-function! lightline#bufferline#move_by(offset) abort
+function! lightline#bufferline#move_relative(offset) abort
   let l:buffers = s:filtered_buffers()
   let l:current = index(l:buffers, bufnr('%'))
   let l:target = s:clamp(l:current + a:offset, len(l:buffers))
-  return s:move_to(l:target + 1, s:filtered_buffers())
+  return s:move(l:target + 1, s:filtered_buffers())
 endfunction
 
 function! lightline#bufferline#move_next() abort
-  return lightline#bufferline#move_by(1)
+  return lightline#bufferline#move_relative(1)
 endfunction
 
 function! lightline#bufferline#move_previous() abort
-  return lightline#bufferline#move_by(-1)
+  return lightline#bufferline#move_relative(-1)
 endfunction
 
 function! lightline#bufferline#move_first() abort
-  return lightline#bufferline#move_to(1)
+  return lightline#bufferline#move(1)
 endfunction
 
 function! lightline#bufferline#move_last() abort
   let l:buffers = s:filtered_buffers()
-  return s:move_to(len(l:buffers), s:filtered_buffers())
+  return s:move(len(l:buffers), s:filtered_buffers())
 endfunction
 
 
