@@ -624,8 +624,8 @@ endfunction
 function! lightline#bufferline#move_relative(offset) abort
   let l:buffers = s:filtered_buffers()
   let l:current = index(l:buffers, bufnr('%'))
-  let l:target = s:clamp(l:current + a:offset, len(l:buffers))
-  return s:move(l:target + 1, s:filtered_buffers())
+  let l:target = s:clamp(l:current + a:offset, len(l:buffers)) + 1
+  return s:move(l:target, l:buffers)
 endfunction
 
 function! lightline#bufferline#move_next() abort
@@ -642,7 +642,7 @@ endfunction
 
 function! lightline#bufferline#move_last() abort
   let l:buffers = s:filtered_buffers()
-  return s:move(len(l:buffers), s:filtered_buffers())
+  return s:move(len(l:buffers), l:buffers)
 endfunction
 
 
