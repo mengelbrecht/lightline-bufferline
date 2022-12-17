@@ -363,6 +363,16 @@ nmap <Leader><Tab>   <Plug>lightline#bufferline#go_next_category()
 nmap <Leader><S-Tab> <Plug>lightline#bufferline#go_previous_category()
 ```
 
+For reordering buffers, you can use e.g. these mappings:
+
+```viml
+nmap <Leader>bl <Plug>lightline#bufferline#move_next()
+nmap <Leader>bh <Plug>lightline#bufferline#move_previous()
+nmap <Leader>bk <Plug>lightline#bufferline#move_first()
+nmap <Leader>bj <Plug>lightline#bufferline#move_last()
+nmap <Leader>bb <Plug>lightline#bufferline#reset_order()
+```
+
 Additionally you can use the following e.g. to delete buffers by their ordinal number.
 
 ```viml
@@ -419,6 +429,36 @@ This function switches to the first buffer in the next category.
 #### `lightline#bufferline#go_previous_category()`
 
 This function switches to the first buffer in the previous category.
+
+#### `lightline#bufferline#move(target)`
+
+This function moves current buffer to given ordinal position.
+
+#### `lightline#bufferline#move_relative(offset)`
+
+This function moves current buffer by given number of positions.
+Passing a value of `1` for `offset` would move current buffer one position to right,
+while a value of `-1` would move it one position to left.
+
+#### `lightline#bufferline#move_next()`
+
+This function moves current buffer one position to the right.
+
+#### `lightline#bufferline#move_previous()`
+
+This function moves current buffer one position to the left.
+
+#### `lightline#bufferline#move_first()`
+
+This function moves current buffer one position to the first position.
+
+#### `lightline#bufferline#move_last()`
+
+This function moves current buffer one position to the last position.
+
+#### `lightline#bufferline#reset_order()`
+
+This function resets the order of all buffers to default, which is the order buffers were created.
 
 #### `lightline#bufferline#delete(n)`
 
