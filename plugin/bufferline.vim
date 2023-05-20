@@ -1,6 +1,6 @@
 " Plugin:      https://github.com/mgee/lightline-bufferline
 " Description: A lightweight bufferline for the lightline vim plugin.
-" Maintainer:  Markus Engelbrecht <https://github.com/mgee>
+" Maintainer:  Markus Engelbrecht <https://github.com/mengelbrecht>
 
 if exists('g:loaded_lightline_bufferline')
   finish
