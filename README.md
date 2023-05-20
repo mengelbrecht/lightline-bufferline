@@ -390,7 +390,11 @@ nmap <Leader>c0 <Plug>lightline#bufferline#delete(10)
 
 ## Functions
 
-This plugin provides some public functions to operate with buffers using their ordinal number.
+This plugin provides some public functions to interact with the plugin.
+
+#### `lightline#bufferline#reload()`
+
+This function reloads the plugin configuration (e.g. when you have modified the configuration after vim is already running) and refreshes lightline.
 
 #### `lightline#bufferline#get_ordinal_number_for_buffer(buffer)`
 

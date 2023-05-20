@@ -4,61 +4,65 @@
 
 scriptencoding utf-8
 
-let s:dirsep              = fnamemodify(getcwd(),':p')[-1:]
-let s:filename_modifier   = get(g:, 'lightline#bufferline#filename_modifier', ':.')
-let s:min_buffer_count    = get(g:, 'lightline#bufferline#min_buffer_count', 0)
-let s:min_tab_count       = get(g:, 'lightline#bufferline#min_tab_count', 0)
-let s:filter_by_tabpage   = get(g:, 'lightline#bufferline#filter_by_tabpage', 0)
-let s:buffer_filter       = get(g:, 'lightline#bufferline#buffer_filter', 's:buffer_filter_noop')
-let s:auto_hide           = get(g:, 'lightline#bufferline#auto_hide', 0)
-let s:max_width_function  = get(g:, 'lightline#bufferline#max_width', 's:max_width')
-let s:disable_more_buffers_indicator = get(g:, 'lightline#bufferline#disable_more_buffers_indicator', 0)
-let s:margin_left         = get(g:, 'lightline#bufferline#margin_left', 0)
-let s:margin_right        = get(g:, 'lightline#bufferline#margin_right', 0)
-let s:ordinal_number_map  = get(g:, 'lightline#bufferline#ordinal_number_map', get(g:, 'lightline#bufferline#number_map', {}))
-let s:buffer_number_map   = get(g:, 'lightline#bufferline#buffer_number_map', {})
-let s:composed_ordinal_number_map = get(g:, 'lightline#bufferline#composed_ordinal_number_map', get(g:, 'lightline#bufferline#composed_number_map', {}))
-let s:composed_buffer_number_map = get(g:, 'lightline#bufferline#composed_buffer_number_map', {})
-let s:shorten_path        = get(g:, 'lightline#bufferline#shorten_path', 1)
-let s:smart_path          = get(g:, 'lightline#bufferline#smart_path', 1)
-let s:show_number         = get(g:, 'lightline#bufferline#show_number', 0)
-let s:number_separator    = get(g:, 'lightline#bufferline#number_separator', ' ')
-let s:ordinal_separator   = get(g:, 'lightline#bufferline#ordinal_separator', '')
-let s:unnamed             = get(g:, 'lightline#bufferline#unnamed', '*')
-let s:reverse_buffers     = get(g:, 'lightline#bufferline#reverse_buffers', 0)
-let s:right_aligned       = get(g:, 'lightline#bufferline#right_aligned', 0)
-let s:enable_devicons     = get(g:, 'lightline#bufferline#enable_devicons', 0)
-let s:enable_nerdfont     = get(g:, 'lightline#bufferline#enable_nerdfont', 0)
-let s:icon_position       = get(g:, 'lightline#bufferline#icon_position', 'left')
-let s:unicode_symbols     = get(g:, 'lightline#bufferline#unicode_symbols', 0)
-if s:unicode_symbols == 0
-  let s:modified          = get(g:, 'lightline#bufferline#modified', ' +')
-  let s:read_only         = get(g:, 'lightline#bufferline#read_only', ' -')
-  let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '...')
-else
-  let s:modified          = get(g:, 'lightline#bufferline#modified', ' ✎')
-  let s:read_only         = get(g:, 'lightline#bufferline#read_only', ' ')
-  let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '…')
-endif
-if exists('g:lightline.component_raw.buffers')
-  let s:component_is_raw  = g:lightline.component_raw.buffers
-else
-  let s:component_is_raw  = 0
-endif
-let s:clickable           = has('tablineat') && s:component_is_raw ? get(g:, 'lightline#bufferline#clickable', 0) : 0
-if s:component_is_raw
-  let s:more_buffers = ' ' . s:more_buffers . ' '
-  let s:more_buffers_width = len(s:more_buffers)
-else
-  let s:more_buffers_width = len(s:more_buffers) + 2
-endif
+function! lightline#bufferline#load()
+  let s:dirsep              = fnamemodify(getcwd(),':p')[-1:]
+  let s:filename_modifier   = get(g:, 'lightline#bufferline#filename_modifier', ':.')
+  let s:min_buffer_count    = get(g:, 'lightline#bufferline#min_buffer_count', 0)
+  let s:min_tab_count       = get(g:, 'lightline#bufferline#min_tab_count', 0)
+  let s:filter_by_tabpage   = get(g:, 'lightline#bufferline#filter_by_tabpage', 0)
+  let s:buffer_filter       = get(g:, 'lightline#bufferline#buffer_filter', 's:buffer_filter_noop')
+  let s:auto_hide           = get(g:, 'lightline#bufferline#auto_hide', 0)
+  let s:max_width_function  = get(g:, 'lightline#bufferline#max_width', 's:max_width')
+  let s:disable_more_buffers_indicator = get(g:, 'lightline#bufferline#disable_more_buffers_indicator', 0)
+  let s:margin_left         = get(g:, 'lightline#bufferline#margin_left', 0)
+  let s:margin_right        = get(g:, 'lightline#bufferline#margin_right', 0)
+  let s:ordinal_number_map  = get(g:, 'lightline#bufferline#ordinal_number_map', get(g:, 'lightline#bufferline#number_map', {}))
+  let s:buffer_number_map   = get(g:, 'lightline#bufferline#buffer_number_map', {})
+  let s:composed_ordinal_number_map = get(g:, 'lightline#bufferline#composed_ordinal_number_map', get(g:, 'lightline#bufferline#composed_number_map', {}))
+  let s:composed_buffer_number_map = get(g:, 'lightline#bufferline#composed_buffer_number_map', {})
+  let s:shorten_path        = get(g:, 'lightline#bufferline#shorten_path', 1)
+  let s:smart_path          = get(g:, 'lightline#bufferline#smart_path', 1)
+  let s:show_number         = get(g:, 'lightline#bufferline#show_number', 0)
+  let s:number_separator    = get(g:, 'lightline#bufferline#number_separator', ' ')
+  let s:ordinal_separator   = get(g:, 'lightline#bufferline#ordinal_separator', '')
+  let s:unnamed             = get(g:, 'lightline#bufferline#unnamed', '*')
+  let s:reverse_buffers     = get(g:, 'lightline#bufferline#reverse_buffers', 0)
+  let s:right_aligned       = get(g:, 'lightline#bufferline#right_aligned', 0)
+  let s:enable_devicons     = get(g:, 'lightline#bufferline#enable_devicons', 0)
+  let s:enable_nerdfont     = get(g:, 'lightline#bufferline#enable_nerdfont', 0)
+  let s:icon_position       = get(g:, 'lightline#bufferline#icon_position', 'left')
+  let s:unicode_symbols     = get(g:, 'lightline#bufferline#unicode_symbols', 0)
+  if s:unicode_symbols == 0
+    let s:modified          = get(g:, 'lightline#bufferline#modified', ' +')
+    let s:read_only         = get(g:, 'lightline#bufferline#read_only', ' -')
+    let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '...')
+  else
+    let s:modified          = get(g:, 'lightline#bufferline#modified', ' ✎')
+    let s:read_only         = get(g:, 'lightline#bufferline#read_only', ' ')
+    let s:more_buffers      = get(g:, 'lightline#bufferline#more_buffers', '…')
+  endif
+  if exists('g:lightline.component_raw.buffers')
+    let s:component_is_raw  = g:lightline.component_raw.buffers
+  else
+    let s:component_is_raw  = 0
+  endif
+  let s:clickable           = has('tablineat') && s:component_is_raw ? get(g:, 'lightline#bufferline#clickable', 0) : 0
+  if s:component_is_raw
+    let s:more_buffers = ' ' . s:more_buffers . ' '
+    let s:more_buffers_width = len(s:more_buffers)
+  else
+    let s:more_buffers_width = len(s:more_buffers) + 2
+    let s:maxWidthFunc = function(s:max_width_function)
+  endif
+endfunction
 
-if s:clickable
-  function! s:pre_click_handler()
-  endfunction
+function! lightline#bufferline#reload()
+  call lightline#bufferline#load()
+  call s:force_update()
+endfunction
 
-  autocmd User LightlineBufferlinePreClick call s:pre_click_handler()
-endif
+function! s:pre_click_handler()
+endfunction
 
 function! lightline#bufferline#_click_handler(minwid, clicks, btn, modifiers)
   doautocmd User LightlineBufferlinePreClick
@@ -348,8 +352,6 @@ endfunction
 function! s:max_width()
   return &columns
 endfunction
-
-let s:maxWidthFunc = function(s:max_width_function)
 
 function! s:select_buffers(before, current, after)
   let [l:before_names, l:current_names, l:after_names] = [a:before[0], a:current[0], a:after[0]]
@@ -645,6 +647,9 @@ function! lightline#bufferline#move_last() abort
   return s:move(len(l:buffers), l:buffers)
 endfunction
 
+call lightline#bufferline#load()
+
+autocmd User LightlineBufferlinePreClick call s:pre_click_handler()
 
 noremap <silent> <Plug>lightline#bufferline#go(1)  :call lightline#bufferline#go(1)<CR>
 noremap <silent> <Plug>lightline#bufferline#go(2)  :call lightline#bufferline#go(2)<CR>
