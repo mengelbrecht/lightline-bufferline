@@ -52,8 +52,8 @@ function! lightline#bufferline#load()
     let s:more_buffers_width = len(s:more_buffers)
   else
     let s:more_buffers_width = len(s:more_buffers) + 2
-    let s:maxWidthFunc = function(s:max_width_function)
   endif
+  let s:maxWidthFunc = function(s:max_width_function)
 endfunction
 
 function! lightline#bufferline#reload()
