@@ -375,8 +375,12 @@ function! s:select_buffers(before, current, after)
   if l:more_before && l:more_after
     " Buffers on both sides don't fit. Recompute, but account for s:more_buffers to be visible on both sides
     let [l:before, l:current, l:after] = s:select_fitting_buffers(l:before_names, l:current_names, l:after_names, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width*2)
-    let l:before = [s:more_buffers] + l:before
-    let l:after += [s:more_buffers]
+    if len(l:before_names) > len(l:before)
+      let l:before = [s:more_buffers] + l:before
+    endif
+    if len(l:after_names) > len(l:after)
+      let l:after += [s:more_buffers]
+    endif
   elseif l:more_before || l:more_after
     " Buffers on one side don't fit. Recompute, but account for s:more_buffers to be visible on that side
     let [l:before, l:current, l:after] = s:select_fitting_buffers(l:before_names, l:current_names, l:after_names, l:before_lengths, l:after_lengths, l:width - s:more_buffers_width)
@@ -414,7 +418,7 @@ function! s:select_fitting_buffers(before, current, after, before_lengths, after
 
   " Add as many buffers as possible on the left
   " Don't forget to use the 'before' list in reversed order
-  let [l:width, l:left] = s:fit_lengths(reverse(a:before_lengths), l:width)
+  let [l:width, l:left] = s:fit_lengths(reverse(copy(a:before_lengths)), l:width)
   " Handle empty list carefully, slices are inclusive
   let l:before = l:left == 0 ? [] : a:before[-l:left:]
 
