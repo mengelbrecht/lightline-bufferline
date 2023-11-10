@@ -54,6 +54,21 @@ function! lightline#bufferline#load()
     let s:more_buffers_width = len(s:more_buffers) + 2
   endif
   let s:maxWidthFunc = function(s:max_width_function)
+
+  function! s:GetSeparator(sub, def)
+    " Cannot use `get()` as it doesn't support dict deep indexing
+    let l:align = s:right_aligned ? 'right' : 'left'
+    if exists('g:lightline.tabline_' .. a:sub .. 'separator.' .. l:align)
+      return g:lightline['tabline_' .. a:sub .. 'separator'][l:align]
+    elseif exists('g:lightline.' .. a:sub .. 'separator.' .. l:align)
+      return g:lightline[a:sub .. 'separator'][l:align]
+    else
+      return a:def
+    endif
+  endfunction
+
+  let s:separator_len = len(s:GetSeparator('', ''))
+  let s:subseparator_len = len(s:GetSeparator('sub', '|'))
 endfunction
 
 function! lightline#bufferline#reload()
@@ -316,14 +331,23 @@ function! s:get_buffer_paths(buffers)
   return map(l:smart_buffers, 'v:val.label')
 endfunction
 
-function! s:get_buffer_names(buffers, from, to)
+function! s:get_buffer_names(buffers, from, to, section)
   let l:names = []
   let l:lengths = []
   let l:buffer_paths = s:get_buffer_paths(a:buffers)
   for l:i in range(a:from, a:to - 1)
     let [l:name, l:len] = s:get_buffer_name(l:i, a:buffers[l:i], l:buffer_paths[l:i])
+
+    " Adjust name length by padding whitespace and separator
+    let l:len += 2
+    if a:section == 'before'
+      let l:len += l:i == a:to - 1 ? s:separator_len : s:subseparator_len
+    elseif a:section == 'after'
+      let l:len += l:i == a:from ? s:separator_len : s:subseparator_len
+    endif
+
     call add(l:names, l:name)
-    call add(l:lengths, l:len + 4)
+    call add(l:lengths, l:len)
   endfor
   return [l:names, l:lengths]
 endfunction
@@ -496,11 +520,11 @@ function! lightline#bufferline#buffers()
   let l:buffers = s:filtered_buffers()
   let l:current_index = index(l:buffers, bufnr('%'))
   if l:current_index == -1
-    return [s:get_buffer_names(l:buffers, 0, len(l:buffers))[0], [], []]
+    return [s:get_buffer_names(l:buffers, 0, len(l:buffers), 'before')[0], [], []]
   endif
-  let l:before = s:get_buffer_names(l:buffers, 0, l:current_index)
-  let l:current = s:get_buffer_names(l:buffers, l:current_index, l:current_index + 1)
-  let l:after = s:get_buffer_names(l:buffers, l:current_index + 1, len(l:buffers))
+  let l:before = s:get_buffer_names(l:buffers, 0, l:current_index, 'before')
+  let l:current = s:get_buffer_names(l:buffers, l:current_index, l:current_index + 1, 'current')
+  let l:after = s:get_buffer_names(l:buffers, l:current_index + 1, len(l:buffers), 'after')
   if s:right_aligned == 1
     return s:select_buffers(l:after, l:current, l:before)
   else
