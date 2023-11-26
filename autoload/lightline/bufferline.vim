@@ -55,7 +55,7 @@ function! lightline#bufferline#load()
   endif
   let s:maxWidthFunc = function(s:max_width_function)
 
-  function! s:GetSeparator(sub, def)
+  function! s:get_separator(sub, def)
     " Cannot use `get()` as it doesn't support dict deep indexing
     let l:align = s:right_aligned ? 'right' : 'left'
     if exists('g:lightline.tabline_' .. a:sub .. 'separator.' .. l:align)
@@ -67,8 +67,8 @@ function! lightline#bufferline#load()
     endif
   endfunction
 
-  let s:separator_len = len(s:GetSeparator('', ''))
-  let s:subseparator_len = len(s:GetSeparator('sub', '|'))
+  let s:separator_len = len(s:get_separator('', ''))
+  let s:subseparator_len = len(s:get_separator('sub', '|'))
 endfunction
 
 function! lightline#bufferline#reload()
