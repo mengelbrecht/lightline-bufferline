@@ -388,7 +388,26 @@ nmap <Leader>c9 <Plug>lightline#bufferline#delete(9)
 nmap <Leader>c0 <Plug>lightline#bufferline#delete(10)
 ```
 
-## Functions
+Delete buffers
+
+1. except first 
+```viml
+  nnoremap <silent> <Leader>da0 :call lightline#bufferline#delete_buffers_except_first()<CR>
+```
+2. except current selected
+```viml
+  nnoremap <silent> <Leader>dba :call lightline#bufferline#delete_buffers_except_current()<CR>
+```
+3. after current selected
+```viml
+  nnoremap <silent> <Leader>da1 :call lightline#bufferline#delete_buffers_after_current()<CR>
+```
+4. before current selected
+```viml
+  nnoremap <silent> <Leader>db1 :call lightline#bufferline#delete_buffers_before_current()<CR>
+```
+
+# Functions
 
 This plugin provides some public functions to interact with the plugin.
 
