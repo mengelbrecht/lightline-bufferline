@@ -196,7 +196,7 @@ endfunction
 
 function! s:filter_buffer(i)
   return bufexists(a:i) && buflisted(a:i) && getbufvar(a:i, '&filetype') !=# 'qf'
-       \ && s:tabpage_filter(a:i) && s:buffer_category(a:i) != ''
+        \ && s:tabpage_filter(a:i) && s:buffer_category(a:i) != ''
 endfunction
 
 " Inserting only identity (f(x) == x), not removing values and just swapping
@@ -462,9 +462,9 @@ function! s:select_fitting_buffers(before, current, after, before_lengths, after
 endfunction
 
 function! s:is_read_only(buffer)
-    let l:modifiable = getbufvar(a:buffer, '&modifiable')
-    let l:readonly = getbufvar(a:buffer, '&readonly')
-    return (l:readonly || !l:modifiable) && getbufvar(a:buffer, '&filetype') !=# 'help'
+  let l:modifiable = getbufvar(a:buffer, '&modifiable')
+  let l:readonly = getbufvar(a:buffer, '&readonly')
+  return (l:readonly || !l:modifiable) && getbufvar(a:buffer, '&filetype') !=# 'help'
 endfunction
 
 function! s:auto_tabline_timer(...) abort
@@ -493,7 +493,7 @@ endfunction
 
 function! s:auto_tabline() abort
   if !exists('s:auto_tabline_timer')
-      let s:auto_tabline_timer = timer_start(10, function('s:auto_tabline_timer'))
+    let s:auto_tabline_timer = timer_start(10, function('s:auto_tabline_timer'))
   endif
 endfunction
 
@@ -549,7 +549,7 @@ function lightline#bufferline#go_relative(offset)
   let l:buffers = s:filtered_buffers()
   let l:current_index = index(l:buffers, bufnr('%'))
   if l:current_index == -1
-      return
+    return
   endif
 
   let l:new_index = s:clamp(l:current_index + a:offset, len(l:buffers))
@@ -592,6 +592,50 @@ endfunction
 
 function! lightline#bufferline#delete(n)
   call s:delete_nth_buffer(a:n - 1)
+  " flush the buffers
+  call s:force_update()
+endfunction
+
+function! lightline#bufferline#delete_buffers_except_first()
+  let l:buffers = s:filtered_buffers()
+  let l:current_index = index(l:buffers, bufnr('%'))
+  if l:current_index != 0
+    " go to the first buffer before deleting
+    call s:goto_nth_buffer(0)
+  endif
+  call lightline#bufferline#delete_buffers_after_current()
+endfunction
+
+function! lightline#bufferline#delete_buffers_except_current()
+  call lightline#bufferline#delete_buffers_before_current()
+  call lightline#bufferline#delete_buffers_after_current()
+endfunction
+
+function! lightline#bufferline#delete_buffers_after_current()
+  let l:buffers = s:filtered_buffers()
+  " get current index
+  let l:current_index = index(l:buffers, bufnr('%'))
+  " the ordinal number of current buffer is l:current_index + 1
+  let l:buffer_after_current = l:current_index + 2
+  for _ in range(l:current_index, len(l:buffers))
+    call lightline#bufferline#delete(l:buffer_after_current)
+  endfor
+endfunction
+
+function! lightline#bufferline#delete_buffers_before_current()
+  let l:buffers = s:filtered_buffers()
+  " get current index
+  let l:current_index = index(l:buffers, bufnr('%'))
+  for _ in range(len(l:buffers))
+    if l:current_index <= 0
+      return
+    endif
+    " the l:current_index is the ordinal number of the buffer before the current
+    let l:buffer_before_current = l:current_index
+    call lightline#bufferline#delete(l:buffer_before_current)
+    " the buffer index is shifted to the left
+    let l:current_index -= 1
+  endfor
 endfunction
 
 function! lightline#bufferline#get_ordinal_number_for_buffer(buffer)
@@ -602,7 +646,7 @@ function! lightline#bufferline#get_buffer_for_ordinal_number(n)
   return s:get_buffer_for_ordinal_number(a:n - 1)
 endfunction
 
-  " lightline#update() does not always work
+" lightline#update() does not always work
 function! s:force_update() abort
   call lightline#toggle()
   call lightline#toggle()
@@ -640,7 +684,7 @@ function! s:move(target, buffers) abort
   let l:direction = l:current > l:target ? 1 : -1
   for l:pivot in range(l:target, l:current - l:direction, l:direction)
     let s:order[l:buffers[l:pivot]] =
-      \ s:get_order(l:buffers[l:pivot + l:direction])
+          \ s:get_order(l:buffers[l:pivot + l:direction])
   endfor
 
   let s:order[l:buffers[l:current]] = l:new_order
